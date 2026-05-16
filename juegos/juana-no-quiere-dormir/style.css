@@ -1,0 +1,319 @@
+/* ============================================================
+   "Juana no quiere dormir" — Estilos
+   Estética: manga / kawaii / cuento infantil nocturno.
+   Paleta:
+     --noche-profunda  -> azul muy oscuro (cielo nocturno)
+     --noche-suave     -> morado/azul medio (paredes mágicas)
+     --crema           -> color principal de texto cálido
+     --rosa-juana      -> color firma de Juana
+     --amarillo-estrella -> coleccionables y acentos
+     --morado-sopa     -> sopa mágica
+   ============================================================ */
+
+:root {
+  --noche-profunda: #0e1336;
+  --noche-suave: #1c2256;
+  --noche-pared: #3a3f8a;
+  --crema: #fff4dc;
+  --crema-suave: #ffe9c2;
+  --rosa-juana: #ff7fb6;
+  --rosa-fuerte: #ff4f9c;
+  --amarillo-estrella: #ffd866;
+  --morado-sopa: #c084fc;
+  --azul-papa: #6ec1e4;
+  --verde-magia: #95e1c1;
+  --sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --radio-grande: 24px;
+  --radio-medio: 16px;
+  --radio-chico: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Comic Sans MS", "Baloo 2", "Quicksand", "Trebuchet MS", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 127, 182, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.18), transparent 45%),
+    linear-gradient(180deg, #0a0e2a 0%, #161a45 100%);
+  color: var(--crema);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Contenedor principal */
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Sistema de pantallas ===== */
+.pantalla {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 24px;
+  animation: aparecer 0.4s ease;
+}
+.pantalla.activa { display: flex; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Caja central reutilizable (menús, historia, etc.) ===== */
+.caja-central {
+  background: linear-gradient(160deg, rgba(28, 34, 86, 0.92), rgba(58, 63, 138, 0.88));
+  border: 2px solid rgba(255, 244, 220, 0.18);
+  border-radius: var(--radio-grande);
+  padding: 36px 44px;
+  text-align: center;
+  max-width: 620px;
+  box-shadow: var(--sombra-suave), 0 0 60px rgba(192, 132, 252, 0.15) inset;
+  backdrop-filter: blur(6px);
+}
+
+.titulo {
+  font-size: 3rem;
+  margin: 0 0 12px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 0 24px rgba(255, 127, 182, 0.45);
+}
+.titulo-sec {
+  font-size: 2rem;
+  margin: 0 0 14px;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+.rosa { color: var(--rosa-juana); }
+.brillo {
+  color: var(--morado-sopa);
+  text-shadow: 0 0 12px rgba(192, 132, 252, 0.8);
+}
+
+.subtitulo {
+  font-size: 1.15rem;
+  margin: 0 0 22px;
+  color: var(--crema-suave);
+}
+.texto-historia {
+  font-size: 1.1rem;
+  line-height: 1.55;
+  margin: 0 0 22px;
+  color: var(--crema-suave);
+}
+.ayuda {
+  margin-top: 18px;
+  font-size: 0.95rem;
+  color: rgba(255, 244, 220, 0.7);
+}
+.ayuda.pequena { font-size: 0.85rem; margin-top: 10px; }
+
+/* ===== Bloque de controles de 2 jugadores ===== */
+.controles-doble {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 18px auto 10px;
+  padding: 14px 18px;
+  background: rgba(14, 19, 54, 0.55);
+  border-radius: var(--radio-medio);
+  border: 1px solid rgba(255, 244, 220, 0.12);
+  max-width: 360px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+.control-jug {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dot {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+.rosa-bg { background: var(--rosa-fuerte); color: var(--rosa-fuerte); }
+.azul-bg { background: #3d7ab8; color: #3d7ab8; }
+
+/* ===== Carteles de los personajes a los lados del tablero ===== */
+.cartel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 220px;
+  z-index: 1;
+  pointer-events: none;
+  animation: flotarCartel 5s ease-in-out infinite;
+}
+.cartel-izq { left: 24px; }
+.cartel-der { right: 24px; animation-delay: 1.5s; }
+
+.cartel-marco {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  border-radius: var(--radio-grande);
+  background: linear-gradient(160deg, rgba(28, 34, 86, 0.92), rgba(58, 63, 138, 0.88));
+  border: 3px solid rgba(255, 244, 220, 0.25);
+  box-shadow:
+    var(--sombra-suave),
+    0 0 40px rgba(192, 132, 252, 0.25);
+  overflow: hidden;
+}
+.cartel-marco img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Papá (izquierda) en azul */
+.cartel-izq .cartel-marco {
+  border-color: rgba(61, 122, 184, 0.55);
+  box-shadow: var(--sombra-suave), 0 0 40px rgba(61, 122, 184, 0.35);
+}
+/* Juana (derecha) en rosa */
+.cartel-der .cartel-marco {
+  border-color: rgba(255, 79, 156, 0.55);
+  box-shadow: var(--sombra-suave), 0 0 40px rgba(255, 79, 156, 0.35);
+}
+.cartel-nombre {
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  background: #3d7ab8;  /* Papá (izq) por defecto */
+}
+.cartel-der .cartel-nombre {
+  background: var(--rosa-fuerte);  /* Juana (der) en rosa */
+}
+
+/* Si la imagen no carga, el marco se ve igual de bonito (con un texto guía) */
+.cartel-marco.vacio::after {
+  content: "Pon tu foto en\Apersonajes/Papa.png";
+  white-space: pre;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 244, 220, 0.6);
+  padding: 12px;
+}
+.cartel-der .cartel-marco.vacio::after {
+  content: "Pon tu foto en\Apersonajes/juana.png";
+}
+
+@keyframes flotarCartel {
+  0%, 100% { transform: translateY(-50%) translateY(0); }
+  50%      { transform: translateY(-50%) translateY(-8px); }
+}
+
+/* En pantallas angostas escondemos los carteles para que no tapen el juego */
+@media (max-width: 1200px) {
+  .cartel { display: none; }
+}
+
+/* ============================================================
+   PANTALLAS DE MODO Y SALAS (multijugador online)
+   ============================================================ */
+
+.modos-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 18px 0 22px;
+}
+@media (min-width: 720px) {
+  .modos-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.modo-card,
+.rol-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 16px;
+  border-radius: var(--radio-medio);
+  border: 2px solid rgba(255, 244, 220, 0.2);
+  background: rgba(14, 19, 54, 0.55);
+  color: var(--crema);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: center;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+.modo-card:hover,
+.rol-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--amarillo-estrella);
+  box-shadow: 0 8px 24px rgba(255, 216, 102, 0.2);
+}
+.modo-emoji,
+.rol-emoji {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.modo-titulo,
+.rol-nombre {
+  font-weight: bold;
+  font-size: 1.05rem;
+  color: var(--amarillo-estrella);
+}
+.modo-texto,
+.rol-texto {
+  color: var(--crema-suave);
+  font-size: 0.9rem;
+}
+
+.rol-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+/* ===== Botón "Volver al Hub" (fijo arriba a la izquierda) ===== */
+.boton-hub {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: rgba(14, 19, 54, 0.85);
+  color: var(--crema);
+  border: 1.5px solid rgba(255, 244, 220, 0.3);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+.boton-hub:hover {
+  background: var(--amarillo-estrella);
+  color: #2a1240;
+  border-color: var(--amarillo-estrella);
+  transform: translateX(-2px);
+}

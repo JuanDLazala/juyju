@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mundo Mágico de Juana y Papá</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="estrellas-fondo" aria-hidden="true"></div>
+
+  <main class="hub">
+
+    <header class="hub-header">
+      <h1 class="hub-titulo">
+        Mundo <span class="rosa">Mágico</span> de
+        <span class="brillo">Juana</span> y <span class="azul">Papá</span>
+      </h1>
+      <p class="hub-subtitulo">Elige tu aventura ✨</p>
+    </header>
+
+    <!-- Las tarjetas de juegos se generan dinámicamente desde el array JUEGOS de abajo.
+         Para agregar un juego nuevo: crea una carpeta en /juegos/ y agrega una entrada
+         al array. Ver instrucciones al final del archivo. -->
+    <section id="grid-juegos" class="hub-grid"></section>
+
+    <footer class="hub-footer">
+      <p>Hecho con 💖 por Papá y Juana &nbsp;·&nbsp; <span id="contador-juegos">…</span> aventuras disponibles</p>
+    </footer>
+
+  </main>
+
+  <!-- =========================================================
+       CATÁLOGO DE JUEGOS
+       Para agregar un juego nuevo, solo agrega un objeto aquí.
+       Campos:
+         id          — identificador único (debe coincidir con la carpeta)
+         nombre      — título visible
+         subtitulo   — frase corta
+         descripcion — texto descriptivo
+         emoji       — emoji grande de la tarjeta
+         color       — color firma (CSS válido)
+         ruta        — ruta al index.html del juego (o null si es próximo)
+         tags        — array de etiquetas pequeñas
+         estado      — 'disponible' | 'proximamente' | 'beta'
+       ========================================================= -->
+  <script>
+    const JUEGOS = [
+      {
+        id: 'juana-no-quiere-dormir',
+        nombre: 'Juana no quiere dormir',
+        subtitulo: 'Aventura nocturna estilo Pac-Man',
+        descripcion: 'Recoge estrellas y cuentos antes de que papá te atrape. ¡Bebe la sopa mágica e invierte la persecución!',
+        emoji: '🌙',
+        color: '#ff4f9c',
+        ruta: 'juegos/juana-no-quiere-dormir/index.html',
+        tags: ['Pac-Man', '2 jugadores', 'Online'],
+        estado: 'disponible'
+      },
+      // 👇 Ejemplos de juegos futuros (placeholders). Cuando los construyas,
+      //    cambia `estado` a 'disponible' y agrega la `ruta`.
+      {
+        id: 'cuento-interactivo',
+        nombre: 'El cuento de Juana',
+        subtitulo: 'Historia interactiva con decisiones',
+        descripcion: 'Vive un cuento donde cada decisión cambia el final. ¿Princesa? ¿Astronauta? ¿Detective?',
+        emoji: '📖',
+        color: '#c084fc',
+        ruta: null,
+        tags: ['Narrativo', '1 jugador'],
+        estado: 'proximamente'
+      },
+      {
+        id: 'arte-magico',
+        nombre: 'Pinta con Magia',
+        subtitulo: 'Lienzo digital con efectos',
+        descripcion: 'Pinta con pinceles que dejan estelas de estrellas, fuego, agua y arcoíris.',
+        emoji: '🎨',
+        color: '#7fd8c8',
+        ruta: null,
+        tags: ['Creativo', 'Libre'],
+        estado: 'proximamente'
+      }
+    ];
+
+    // ----- Renderizar tarjetas -----
+    const grid = document.getElementById('grid-juegos');
+    const disponibles = JUEGOS.filter(j => j.estado === 'disponible').length;
+    document.getElementById('contador-juegos').textContent = disponibles;
+
+    JUEGOS.forEach(j => {
+      const esJugable = j.estado === 'disponible' && j.ruta;
+      const card = document.createElement(esJugable ? 'a' : 'div');
+      card.className = 'juego-card juego-' + j.estado;
+      if (esJugable) card.href = j.ruta;
+      card.style.setProperty('--color-firma', j.color);
+
+      card.innerHTML = `
+        <div class="juego-emoji">${j.emoji}</div>
+        <h2 class="juego-nombre">${j.nombre}</h2>
+        <p class="juego-subtitulo">${j.subtitulo}</p>
+        <p class="juego-descripcion">${j.descripcion}</p>
+        <div class="juego-tags">
+          ${j.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+        <div class="juego-cta">
+          ${esJugable
+            ? '<span class="cta-jugar">▶ Jugar</span>'
+            : '<span class="cta-proximo">' + (j.estado === 'beta' ? '🧪 Beta' : '🔒 Próximamente') + '</span>'}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>

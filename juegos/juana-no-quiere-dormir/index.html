@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juana no quiere dormir</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Botón de volver al Hub (siempre visible arriba a la izquierda) -->
+  <a href="../../index.html" class="boton-hub" title="Volver al menú de juegos">
+    ← Mundo Mágico
+  </a>
+
+  <main id="app" class="app">
+
+    <!-- ===== PANTALLA INICIAL ===== -->
+    <section id="pantalla-inicio" class="pantalla activa">
+      <div class="estrellas-fondo" aria-hidden="true"></div>
+      <div class="caja-central">
+        <h1 class="titulo">Juana <span class="rosa">no quiere</span> dormir</h1>
+        <p class="subtitulo">Recoge estrellas y cuentos antes de que papá diga: <em>¡a dormir!</em></p>
+        <button class="boton" data-accion="ir-modo">Jugar</button>
+        <p class="ayuda">Modo 2 jugadores · Pausa: <strong>P</strong></p>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA: ELEGIR MODO ===== -->
+    <section id="pantalla-modo" class="pantalla">
+      <div class="caja-central">
+        <h2 class="titulo-sec">¿Cómo van a jugar?</h2>
+        <p class="subtitulo">Eliges con quién juegas y desde dónde.</p>
+        <div class="modos-grid">
+          <button class="modo-card" data-accion="modo-local">
+            <div class="modo-emoji">🛋️</div>
+            <div class="modo-titulo">Los dos en este compu</div>
+            <div class="modo-texto">Juana usa <strong>flechas</strong> y Papá usa <strong>WASD</strong> en el mismo teclado.</div>
+          </button>
+          <button class="modo-card" data-accion="modo-crear">
+            <div class="modo-emoji">🪄</div>
+            <div class="modo-titulo">Crear sala (a distancia)</div>
+            <div class="modo-texto">Te dan un código mágico para que alguien se conecte desde otro compu.</div>
+          </button>
+          <button class="modo-card" data-accion="modo-unirse">
+            <div class="modo-emoji">📨</div>
+            <div class="modo-titulo">Unirse a una sala</div>
+            <div class="modo-texto">¿Te mandaron un código? Escríbelo aquí.</div>
+          </button>
+        </div>
+        <button class="boton secundario" data-accion="ir-inicio">← Volver</button>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA: CREAR SALA (HOST) ===== -->
+    <section id="pantalla-crear-sala" class="pantalla">
+      <div class="caja-central">
+        <h2 class="titulo-sec">Crear sala mágica</h2>
+        <p class="subtitulo">Primero, escoge tu personaje:</p>
+        <div class="rol-grid">
+          <button class="rol-card rol-juana" data-accion="elegir-rol-juana">
+            <div class="rol-emoji">👧</div>
+            <div class="rol-nombre">Soy JUANA</div>
+            <div class="rol-texto">(la que recoge estrellas)</div>
+          </button>
+          <button class="rol-card rol-papa" data-accion="elegir-rol-papa">
+            <div class="rol-emoji">👨</div>
+            <div class="rol-nombre">Soy PAPÁ</div>
+            <div class="rol-texto">(el que persigue)</div>
+          </button>
+        </div>
+        <div id="zona-codigo" class="zona-codigo oculto">
+          <p class="subtitulo">Comparte este código con el otro jugador:</p>
+          <div class="codigo-grande" id="codigo-sala">…</div>
+          <button class="boton secundario" data-accion="copiar-codigo">📋 Copiar código</button>
+          <p class="estado-conexion" id="estado-conexion">Esperando que se conecten…</p>
+        </div>
+        <button class="boton secundario" data-accion="ir-modo">← Volver</button>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA: UNIRSE A SALA (CLIENTE) ===== -->
+    <section id="pantalla-unirse-sala" class="pantalla">
+      <div class="caja-central">
+        <h2 class="titulo-sec">Unirse a una sala</h2>
+        <p class="subtitulo">Escribe el código que te compartieron:</p>
+        <input type="text" id="input-codigo" class="input-codigo"
+               placeholder="JUANA-LUNA-1234" maxlength="30" autocomplete="off" />
+        <div>
+          <button class="boton" data-accion="conectar-sala">Conectar</button>
+          <button class="boton secundario" data-accion="ir-modo">← Volver</button>
+        </div>
+        <p class="estado-conexion" id="estado-conexion-cliente"></p>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA DE HISTORIA ===== -->
+    <section id="pantalla-historia" class="pantalla">
+      <div class="caja-central narrativa">
+        <h2 class="titulo-sec">La noche en que todo cambió</h2>
+        <p class="texto-historia">
+          Era hora de dormir. Pero Juana tenía otros planes.
+          Mientras papá preparaba la rutina de buenas noches,
+          Juana encontró un mapa secreto de la casa…
+          y una <span class="brillo">sopa mágica</span> capaz de cambiarlo todo.
+        </p>
+        <div class="controles-doble">
+          <div class="control-jug"><span class="dot rosa-bg"></span><strong>Juana</strong> mueve con <strong>← ↑ ↓ →</strong></div>
+          <div class="control-jug"><span class="dot azul-bg"></span><strong>Papá</strong> mueve con <strong>W A S D</strong></div>
+        </div>
+        <button class="boton" data-accion="ir-juego">Empezar aventura</button>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA DE JUEGO ===== -->
+    <section id="pantalla-juego" class="pantalla">
+      <aside class="cartel cartel-izq" aria-hidden="true">
+        <div class="cartel-marco">
+          <img src="personajes/Papa.png" alt="Papá Juan"
+               onerror="this.src='personajes/Papa.jpg'; this.onerror=()=>{this.style.display='none'; this.parentNode.classList.add('vacio');};" />
+          <span class="cartel-nombre">PAPÁ JUAN</span>
+        </div>
+      </aside>
+      <aside class="cartel cartel-der" aria-hidden="true">
+        <div class="cartel-marco">
+          <img src="personajes/juana.png" alt="Juana"
+               onerror="this.src='personajes/juana.jpg'; this.onerror=()=>{this.style.display='none'; this.parentNode.classList.add('vacio');};" />
+          <span class="cartel-nombre">JUANA</span>
+        </div>
+      </aside>
+
+      <header class="hud">
+        <div class="hud-bloque">
+          <span class="hud-label">Nivel</span>
+          <span class="hud-valor" id="hud-nivel">1</span>
+          <span class="hud-sub" id="hud-nivel-nombre">La sala traviesa</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-label">Puntaje</span>
+          <span class="hud-valor" id="hud-puntaje">0</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-label">Vidas</span>
+          <span class="hud-valor corazones" id="hud-vidas">♥ ♥ ♥</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-label">Sopa mágica</span>
+          <span class="hud-valor" id="hud-sopa">—</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-label"><span class="dot rosa-bg"></span> Juana</span>
+          <span class="hud-valor" id="hud-poder-juana">Sin poder</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-label"><span class="dot azul-bg"></span> Papá</span>
+          <span class="hud-valor" id="hud-poder-papa">Sin poder</span>
+        </div>
+      </header>
+
+      <div class="canvas-marco">
+        <canvas id="lienzo" width="640" height="640" aria-label="Tablero del juego"></canvas>
+        <div id="mensaje-flotante" class="mensaje-flotante oculto"></div>
+      </div>
+
+      <p class="ayuda pequena">
+        <span class="dot rosa-bg"></span> <strong>Juana</strong>: Flechas &nbsp;·&nbsp;
+        <span class="dot azul-bg"></span> <strong>Papá</strong>: WASD &nbsp;·&nbsp;
+        Pausa: <strong>P</strong>
+      </p>
+    </section>
+
+    <!-- ===== PANTALLA DE DERROTA ===== -->
+    <section id="pantalla-derrota" class="pantalla">
+      <div class="caja-central derrota">
+        <div class="emoji-grande">😴</div>
+        <h2 class="titulo-sec">Papá te atrapó… <span class="rosa">¡a dormir!</span></h2>
+        <p class="texto-historia" id="texto-derrota">
+          Papá desbloqueó un nuevo poder para la próxima noche…
+        </p>
+        <p class="poder-desbloqueado" id="poder-papa-nuevo"></p>
+        <button class="boton" data-accion="reintentar">Intentar otra vez</button>
+        <button class="boton secundario" data-accion="ir-inicio">Volver al inicio</button>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA DE VICTORIA DE NIVEL ===== -->
+    <section id="pantalla-victoria" class="pantalla">
+      <div class="caja-central victoria">
+        <div class="emoji-grande">⭐</div>
+        <h2 class="titulo-sec">¡Juana ganó unos minutos más despierta!</h2>
+        <p class="texto-historia">Pero papá no se rinde tan fácil…</p>
+        <p class="poder-desbloqueado" id="poder-juana-nuevo"></p>
+        <button class="boton" data-accion="siguiente-nivel">Siguiente mundo</button>
+        <button class="boton secundario" data-accion="ir-inicio">Volver al inicio</button>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA FINAL ===== -->
+    <section id="pantalla-final" class="pantalla">
+      <div class="caja-central victoria">
+        <div class="emoji-grande">🌙✨</div>
+        <h2 class="titulo-sec">Juana se quedó despierta toda la noche</h2>
+        <p class="texto-historia">
+          Papá se durmió primero abrazando un cuento.
+          Mañana habrá nuevas aventuras…
+        </p>
+        <button class="boton" data-accion="ir-inicio">Jugar de nuevo</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="network.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
