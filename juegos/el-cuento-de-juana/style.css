@@ -1,0 +1,434 @@
+/* ============================================================
+   "Juana y Munra" — Estilo del cuento interactivo
+   Estética manga/kawaii nocturna, mismo universo del Mundo Mágico.
+   ============================================================ */
+
+:root {
+  --noche-profunda: #0e1336;
+  --noche-suave: #1c2256;
+  --crema: #fff4dc;
+  --crema-suave: #ffe9c2;
+  --rosa-juana: #ff7fb6;
+  --rosa-fuerte: #ff4f9c;
+  --amarillo-estrella: #ffd866;
+  --morado-sopa: #c084fc;
+  --verde-magia: #95e1c1;
+  --azul-cielo: #6ec1e4;
+  --rosa-munra: #ffb0d4;
+  --rosa-munra-oscuro: #d96aa1;
+  --munra-vientre: #fff0e0;
+  --fuego-1: #ff7a3d;
+  --fuego-2: #ffd866;
+  --humo: #bcc7e0;
+  --sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --radio-grande: 24px;
+  --radio-medio: 16px;
+  --radio-chico: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: "Comic Sans MS", "Quicksand", "Trebuchet MS", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 127, 182, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.18), transparent 45%),
+    linear-gradient(180deg, #0a0e2a 0%, #161a45 100%);
+  color: var(--crema);
+  overflow-x: hidden;
+}
+
+/* Estrellas titilantes */
+.estrellas-fondo {
+  position: fixed; inset: 0;
+  pointer-events: none; overflow: hidden; z-index: 0;
+}
+.estrellas-fondo::before,
+.estrellas-fondo::after {
+  content: ""; position: absolute;
+  width: 2px; height: 2px; border-radius: 50%; background: #fff;
+  box-shadow:
+    10vw 12vh #fff, 25vw 28vh #ffd866, 55vw 18vh #fff,
+    75vw 22vh #ff7fb6, 12vw 55vh #fff, 42vw 70vh #c084fc,
+    68vw 60vh #fff, 88vw 80vh #ffd866, 8vw 85vh #fff,
+    22vw 40vh #fff, 52vw 50vh #fff, 35vw 88vh #c084fc,
+    63vw 38vh #ffd866, 5vw 30vh #ff7fb6, 92vw 10vh #fff,
+    18vw 75vh #95e1c1, 80vw 45vh #fff, 38vw 15vh #fff;
+  animation: titilar 3.2s ease-in-out infinite alternate;
+}
+.estrellas-fondo::after { animation-delay: 1.4s; opacity: 0.6; transform: translate(40px, -25px); }
+@keyframes titilar { from { opacity: 0.35; } to { opacity: 1; } }
+
+/* Botón "Volver al Hub" */
+.boton-hub {
+  position: fixed; top: 14px; left: 14px; z-index: 100;
+  padding: 8px 16px; background: rgba(14, 19, 54, 0.85);
+  color: var(--crema); border: 1.5px solid rgba(255, 244, 220, 0.3);
+  border-radius: 999px; font-family: inherit; font-size: 0.9rem;
+  font-weight: bold; text-decoration: none; backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+.boton-hub:hover {
+  background: var(--amarillo-estrella); color: #2a1240;
+  border-color: var(--amarillo-estrella); transform: translateX(-2px);
+}
+
+/* Layout principal */
+.cuento {
+  position: relative; z-index: 1;
+  min-height: 100vh; padding: 60px 20px 40px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Sistema de escenas */
+.escena {
+  width: 100%; max-width: 720px;
+  display: none; animation: aparecer 0.5s ease;
+}
+.escena.activa { display: block; }
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Contenedor central (portada, mini-juegos, diploma) */
+.contenedor-central {
+  background: linear-gradient(160deg, rgba(28, 34, 86, 0.92), rgba(58, 63, 138, 0.88));
+  border: 2px solid rgba(255, 244, 220, 0.18);
+  border-radius: var(--radio-grande);
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: var(--sombra-suave), 0 0 60px rgba(192, 132, 252, 0.15) inset;
+  backdrop-filter: blur(6px);
+}
+
+/* Contenedor de escena (con Munra arriba + texto + opciones) */
+.contenedor-escena {
+  background: linear-gradient(160deg, rgba(28, 34, 86, 0.92), rgba(58, 63, 138, 0.88));
+  border: 2px solid rgba(255, 244, 220, 0.18);
+  border-radius: var(--radio-grande);
+  padding: 30px 28px;
+  box-shadow: var(--sombra-suave);
+}
+
+/* Portada */
+.titulo-cuento {
+  font-size: clamp(2rem, 5vw, 3.2rem); margin: 16px 0 8px;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.25), 0 0 24px rgba(255, 127, 182, 0.5);
+}
+.subtitulo-cuento {
+  font-size: 1.15rem; color: var(--crema-suave);
+  font-style: italic; margin: 0 0 28px;
+}
+.autor {
+  margin-top: 18px; color: rgba(255, 244, 220, 0.5);
+  font-size: 0.85rem; font-style: italic;
+}
+.rosa   { color: var(--rosa-juana); }
+.brillo { color: var(--amarillo-estrella); text-shadow: 0 0 12px rgba(255, 216, 102, 0.7); }
+
+/* Encabezado de capítulo */
+.encabezado-escena {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 16px; padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(255, 244, 220, 0.2);
+}
+.capitulo-numero {
+  font-size: 0.85rem; color: var(--amarillo-estrella);
+  text-transform: uppercase; letter-spacing: 2px; font-weight: bold;
+}
+.capitulo-titulo {
+  font-size: 1.2rem; color: var(--crema);
+}
+
+/* Zona de Munra */
+.zona-munra {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin: 12px 0 20px;
+}
+.munra-grande  { width: 200px; height: 200px; }
+.munra-mediano { width: 140px; height: 140px; }
+
+/* Globo de diálogo de Munra */
+.munra-globo {
+  position: absolute; right: 10%; top: 0;
+  background: var(--crema); color: #2a1240;
+  padding: 10px 14px; border-radius: 16px;
+  font-size: 0.9rem; max-width: 200px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: flotar 2s ease-in-out infinite;
+}
+.munra-globo::after {
+  content: ""; position: absolute; bottom: -8px; left: 30%;
+  border: 8px solid transparent; border-top-color: var(--crema);
+}
+@keyframes flotar {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-4px); }
+}
+
+/* Texto narrativo */
+.texto-escena {
+  font-size: 1.1rem; line-height: 1.6;
+  color: var(--crema-suave); margin: 16px 0 24px;
+}
+.texto-escena strong { color: var(--amarillo-estrella); }
+
+/* Opciones (3 botones grandes) */
+.zona-opciones {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.opcion-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px; border-radius: var(--radio-medio);
+  border: 2px solid rgba(255, 244, 220, 0.2);
+  background: rgba(14, 19, 54, 0.55);
+  color: var(--crema); font-family: inherit; font-size: 1rem;
+  text-align: left; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.opcion-btn:hover {
+  border-color: var(--amarillo-estrella);
+  transform: translateX(4px);
+  background: rgba(255, 216, 102, 0.1);
+}
+.opcion-emoji { font-size: 1.8rem; flex-shrink: 0; }
+.opcion-texto { flex: 1; }
+
+/* Consecuencia */
+.texto-consecuencia {
+  font-size: 1.05rem; color: var(--crema);
+  background: rgba(14, 19, 54, 0.5);
+  padding: 16px 20px; border-radius: var(--radio-medio);
+  border-left: 3px solid var(--morado-sopa);
+}
+.texto-reflexion {
+  margin: 16px 0; padding: 14px 18px;
+  background: rgba(255, 216, 102, 0.12);
+  border-radius: var(--radio-medio);
+  border: 1px dashed var(--amarillo-estrella);
+  color: var(--amarillo-estrella);
+  font-style: italic;
+}
+
+/* Botón estándar */
+.boton-cuento {
+  display: inline-block; margin: 10px 6px;
+  padding: 14px 28px; font-family: inherit; font-size: 1.05rem;
+  font-weight: bold; color: #2a1240;
+  background: linear-gradient(180deg, var(--amarillo-estrella), #ffb84d);
+  border: none; border-radius: 999px; cursor: pointer;
+  box-shadow: 0 5px 0 #b9740a, 0 10px 24px rgba(255, 184, 77, 0.35);
+  text-decoration: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.boton-cuento:hover { filter: brightness(1.05); }
+.boton-cuento:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #b9740a;
+}
+.boton-cuento.secundario {
+  background: linear-gradient(180deg, var(--rosa-juana), var(--rosa-fuerte));
+  color: #fff;
+  box-shadow: 0 5px 0 #b13670;
+}
+
+.titulo-sec {
+  font-size: 1.8rem; margin: 0 0 8px;
+}
+.instruccion {
+  color: var(--crema-suave); margin: 4px 0 20px;
+}
+
+/* MINI-JUEGO: Respirar como ballena */
+.ola-contenedor {
+  position: relative; width: 100%; height: 240px;
+  background: linear-gradient(180deg, transparent 0%, rgba(110, 193, 228, 0.15) 100%);
+  border-radius: var(--radio-medio); overflow: hidden;
+  border: 2px solid rgba(110, 193, 228, 0.4);
+  margin: 20px 0;
+}
+.ola {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 30%; background: linear-gradient(180deg, var(--azul-cielo) 0%, #2a7ba8 100%);
+  border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 14px;
+  font-size: 1.4rem; font-weight: bold; color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  transition: height 4s ease-in-out;
+}
+.ola.subiendo { height: 95%; }
+.ola.bajando  { height: 20%; }
+
+.contador-respiros {
+  font-size: 1.1rem; color: var(--amarillo-estrella);
+  font-weight: bold; margin-top: 10px;
+}
+
+/* MINI-JUEGO: Estrellas */
+.zona-estrellas {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
+  margin: 24px 0; max-width: 400px; margin-left: auto; margin-right: auto;
+}
+.estrella-clickable {
+  width: 60px; height: 60px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; color: var(--amarillo-estrella);
+  filter: drop-shadow(0 0 8px rgba(255, 216, 102, 0.6));
+  transition: transform 0.2s ease, opacity 0.4s ease;
+}
+.estrella-clickable:hover { transform: scale(1.15); }
+.estrella-clickable.contada {
+  opacity: 0.3; transform: scale(0.85);
+  pointer-events: none;
+}
+
+/* MINI-JUEGO: Decir lo que siento */
+.input-sentimiento {
+  display: block; margin: 16px auto;
+  padding: 14px 20px; width: 100%; max-width: 320px;
+  font-family: inherit; font-size: 1.2rem;
+  text-align: center;
+  color: var(--amarillo-estrella);
+  background: rgba(14, 19, 54, 0.7);
+  border: 2px solid var(--morado-sopa);
+  border-radius: var(--radio-medio); outline: none;
+}
+.input-sentimiento:focus {
+  border-color: var(--amarillo-estrella);
+  box-shadow: 0 0 16px rgba(255, 216, 102, 0.4);
+}
+.respuesta-munra {
+  margin-top: 18px; padding: 16px 20px;
+  background: rgba(149, 225, 193, 0.15);
+  border-left: 3px solid var(--verde-magia);
+  border-radius: var(--radio-chico);
+  font-size: 1.05rem; color: var(--crema);
+  font-style: italic;
+}
+
+/* MINI-JUEGO: Mover el fuego / Barra */
+.barra-energia-contenedor {
+  width: 100%; max-width: 400px; margin: 20px auto;
+  height: 30px; background: rgba(14, 19, 54, 0.7);
+  border-radius: 999px; overflow: hidden;
+  border: 2px solid rgba(255, 244, 220, 0.3);
+}
+.barra-energia {
+  width: 0%; height: 100%;
+  background: linear-gradient(90deg, var(--fuego-1), var(--fuego-2));
+  transition: width 0.1s ease;
+  box-shadow: 0 0 16px var(--fuego-1);
+}
+.barra-energia.barra-rosa {
+  background: linear-gradient(90deg, var(--rosa-juana), var(--rosa-fuerte));
+  box-shadow: 0 0 16px var(--rosa-fuerte);
+}
+
+/* MINI-JUEGO: Abrazar */
+.abrazable {
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.3s ease;
+  user-select: none;
+}
+.abrazable:active { transform: scale(0.95); filter: brightness(1.15); }
+
+/* Diploma */
+.diploma {
+  text-align: center;
+}
+.diploma-marco {
+  background: linear-gradient(160deg, #fff4dc 0%, #ffe9c2 100%);
+  color: #2a1240;
+  padding: 36px 28px; border-radius: var(--radio-grande);
+  border: 4px double #b9740a;
+  margin-bottom: 24px;
+  box-shadow: 0 0 60px rgba(255, 216, 102, 0.5);
+}
+.diploma-emoji {
+  font-size: 4rem; margin-bottom: 8px;
+  animation: brincar 1.5s ease-in-out infinite;
+}
+@keyframes brincar {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50%     { transform: translateY(-8px) rotate(3deg); }
+}
+.diploma-titulo {
+  font-size: 1.8rem; margin: 0 0 16px;
+  color: #2a1240;
+}
+.diploma-titulo .rosa { color: var(--rosa-fuerte); }
+.diploma-titulo .brillo { color: #b9740a; text-shadow: none; }
+.diploma-texto {
+  font-size: 1.1rem; margin: 10px 0; color: #2a1240;
+}
+.diploma-texto .brillo { color: #b9740a; text-shadow: none; }
+.diploma-texto strong { color: var(--rosa-fuerte); }
+.diploma-firma {
+  margin-top: 24px; font-style: italic; color: #5a3a1a;
+}
+.trucos-aprendidos {
+  margin: 20px auto; max-width: 380px;
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+}
+.truco-chip {
+  display: inline-block; padding: 6px 14px;
+  background: rgba(255, 79, 156, 0.15);
+  border: 1.5px solid var(--rosa-fuerte);
+  border-radius: 999px; font-size: 0.9rem;
+  color: var(--rosa-fuerte); font-weight: bold;
+}
+
+/* Util */
+.oculto { display: none !important; }
+
+/* ===== ANIMACIONES DE MUNRA (estados de ánimo) ===== */
+.munra-svg { width: 100%; height: 100%; }
+.munra-svg .humo {
+  opacity: 0;
+  animation: subir-humo 2s ease-in-out infinite;
+}
+.munra-svg.humeando .humo { opacity: 1; }
+.munra-svg .fuego {
+  opacity: 0; transform-origin: 50% 100%;
+}
+.munra-svg.furiosa .fuego {
+  opacity: 1;
+  animation: parpadeo-fuego 0.3s ease-in-out infinite alternate;
+}
+.munra-svg.furiosa .cuerpo { fill: #ff8a8a; }
+.munra-svg.furiosa .mejillas { fill: #ff4040; opacity: 0.8; }
+.munra-svg.calmada .cuerpo { fill: var(--azul-cielo); }
+.munra-svg.calmada .mejillas { fill: #4a9eb8; opacity: 0.5; }
+.munra-svg.feliz .brillos {
+  opacity: 1;
+  animation: brillar 1s ease-in-out infinite;
+}
+.munra-svg .brillos { opacity: 0; }
+@keyframes subir-humo {
+  0%   { opacity: 0; transform: translateY(0) scale(0.8); }
+  50%  { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(-20px) scale(1.4); }
+}
+@keyframes parpadeo-fuego {
+  from { transform: scaleY(1) scaleX(1); }
+  to   { transform: scaleY(1.15) scaleX(0.9); }
+}
+@keyframes brillar {
+  0%,100% { transform: scale(1); opacity: 0.7; }
+  50%     { transform: scale(1.3); opacity: 1; }
+}
+/* Munra siempre con respiración suave */
+.munra-svg .cuerpo,
+.munra-svg .cabeza {
+  transform-origin: 50% 50%;
+  animation: respirar-munra 3s ease-in-out infinite;
+}
+@keyframes respirar-munra {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.03); }
+}

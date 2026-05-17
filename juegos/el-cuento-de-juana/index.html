@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juana y Munra · El cuento del dragón que aprendió a respirar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <a href="../../index.html" class="boton-hub" title="Volver al Mundo Mágico">← Mundo Mágico</a>
+
+  <div class="estrellas-fondo" aria-hidden="true"></div>
+
+  <main class="cuento">
+
+    <!-- ===== PORTADA ===== -->
+    <section id="escena-portada" class="escena activa">
+      <div class="contenedor-central">
+        <div id="munra-portada" class="munra-grande"></div>
+        <h1 class="titulo-cuento">
+          Juana <span class="rosa">y</span> <span class="brillo">Munra</span>
+        </h1>
+        <p class="subtitulo-cuento">El cuento del dragón que aprendió a respirar</p>
+        <button class="boton-cuento" data-accion="empezar">Empezar el cuento</button>
+        <p class="autor">Un cuento para Juana, hecho por Papá ✨</p>
+      </div>
+    </section>
+
+    <!-- ===== ESCENA DINÁMICA (todas las escenas pasan por aquí) ===== -->
+    <section id="escena-actual" class="escena">
+      <div class="contenedor-escena">
+
+        <!-- Encabezado: dónde estamos -->
+        <div class="encabezado-escena">
+          <span id="capitulo-numero" class="capitulo-numero">Capítulo 1</span>
+          <span id="capitulo-titulo" class="capitulo-titulo"></span>
+        </div>
+
+        <!-- Munra grande arriba -->
+        <div class="zona-munra">
+          <div id="munra-escena" class="munra-mediano"></div>
+          <div id="munra-globo" class="munra-globo oculto"></div>
+        </div>
+
+        <!-- Texto narrativo de la escena -->
+        <div id="texto-escena" class="texto-escena"></div>
+
+        <!-- Opciones de respuesta (3 botones) -->
+        <div id="zona-opciones" class="zona-opciones"></div>
+
+      </div>
+    </section>
+
+    <!-- ===== MINI-JUEGO: RESPIRAR COMO BALLENA ===== -->
+    <section id="mini-respirar" class="escena mini-juego">
+      <div class="contenedor-central">
+        <h2 class="titulo-sec">🐋 Respira como una ballena</h2>
+        <p class="instruccion">Inhala cuando la ola sube, exhala cuando baja.</p>
+
+        <div class="ola-contenedor">
+          <div id="ola-respirar" class="ola">
+            <span id="texto-ola">Inhala…</span>
+          </div>
+        </div>
+
+        <div class="contador-respiros">
+          Respiros: <span id="contador-respiros">0</span> / 4
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MINI-JUEGO: CONTAR ESTRELLAS ===== -->
+    <section id="mini-estrellas" class="escena mini-juego">
+      <div class="contenedor-central">
+        <h2 class="titulo-sec">⭐ Cuenta las estrellas</h2>
+        <p class="instruccion">Toca cada estrellita. Cuenta despacio: una, dos, tres…</p>
+        <div id="zona-estrellas" class="zona-estrellas"></div>
+        <div class="contador-respiros">
+          Estrellas: <span id="contador-estrellas">0</span> / 10
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MINI-JUEGO: DECIR LO QUE SIENTO ===== -->
+    <section id="mini-decir" class="escena mini-juego">
+      <div class="contenedor-central">
+        <h2 class="titulo-sec">💬 Dile a Munra lo que sientes</h2>
+        <p class="instruccion">Escribe en una palabra lo que sientes. No hay respuestas malas.</p>
+        <div id="munra-escucha" class="munra-mediano"></div>
+        <input type="text" id="input-sentimiento" class="input-sentimiento"
+               placeholder="rabia… tristeza… injusticia…" maxlength="30" />
+        <button class="boton-cuento" data-accion="munra-responde">Decirle a Munra</button>
+        <div id="respuesta-munra" class="respuesta-munra oculto"></div>
+      </div>
+    </section>
+
+    <!-- ===== MINI-JUEGO: MOVER EL FUEGO ===== -->
+    <section id="mini-mover" class="escena mini-juego">
+      <div class="contenedor-central">
+        <h2 class="titulo-sec">🏃 ¡Mueve el fuego!</h2>
+        <p class="instruccion">Aprieta cualquier tecla muchas veces — saca toda la energía.</p>
+        <div class="barra-energia-contenedor">
+          <div id="barra-energia" class="barra-energia"></div>
+        </div>
+        <div class="contador-respiros">
+          ¡Sigue, sigue! <span id="contador-mover">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MINI-JUEGO: ABRAZAR A MUNRA ===== -->
+    <section id="mini-abrazar" class="escena mini-juego">
+      <div class="contenedor-central">
+        <h2 class="titulo-sec">🫂 Abraza a Munra</h2>
+        <p class="instruccion">Mantén presionado a Munra durante 5 segundos. Hazle saber que está contigo.</p>
+        <div id="munra-abrazar" class="munra-grande abrazable" tabindex="0"></div>
+        <div class="barra-energia-contenedor">
+          <div id="barra-abrazo" class="barra-energia barra-rosa"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ESCENA DE CONSECUENCIA (después de una elección) ===== -->
+    <section id="escena-consecuencia" class="escena">
+      <div class="contenedor-escena">
+        <div class="zona-munra">
+          <div id="munra-consecuencia" class="munra-mediano"></div>
+        </div>
+        <div id="texto-consecuencia" class="texto-escena texto-consecuencia"></div>
+        <div id="texto-reflexion" class="texto-reflexion"></div>
+        <button class="boton-cuento" data-accion="siguiente-capitulo">Continuar</button>
+      </div>
+    </section>
+
+    <!-- ===== DIPLOMA FINAL ===== -->
+    <section id="escena-diploma" class="escena">
+      <div class="contenedor-central diploma">
+        <div class="diploma-marco">
+          <div class="diploma-emoji">🏅</div>
+          <h2 class="diploma-titulo">¡Eres una <span class="rosa">Domadora de Dragones</span>!</h2>
+          <p class="diploma-texto">
+            Juana aprendió que <strong>Munra</strong> nunca se va a ir.
+            Y eso está bien.
+          </p>
+          <p class="diploma-texto">
+            Ahora son <span class="brillo">amigas para siempre</span>.
+          </p>
+          <div id="trucos-aprendidos" class="trucos-aprendidos"></div>
+          <p class="diploma-firma">— Con amor, Papá ✨</p>
+        </div>
+        <button class="boton-cuento" data-accion="reiniciar">Volver a empezar</button>
+        <a href="../../index.html" class="boton-cuento secundario">Mundo Mágico</a>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="cuento.js"></script>
+</body>
+</html>
