@@ -1,0 +1,656 @@
+/* ============================================================
+   "La Heladería de Juana" — Estilo Mario Bros + Avatar World
+   Cielo azul vibrante, suelo definido, todo redondito y kawaii.
+   ============================================================ */
+
+:root {
+  --cielo: #87d4ee;
+  --cielo-claro: #b5e6f5;
+  --cielo-noche: #1c2256;
+  --pasto: #6fc94c;
+  --pasto-oscuro: #4a9c30;
+  --acera: #d6b58a;
+  --acera-oscura: #a88a5e;
+  --crema: #fff4dc;
+  --crema-suave: #ffe9c2;
+  --rosa: #ff7fb6;
+  --rosa-fuerte: #ff4f9c;
+  --amarillo: #ffd866;
+  --naranja: #ff7a3d;
+  --morado: #c084fc;
+  --verde: #95e1c1;
+  --azul: #6ec1e4;
+  --azul-fuerte: #3d7ab8;
+  --rojo: #ff5252;
+  --sombra: 0 6px 0 rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
+  --radio-grande: 24px;
+  --radio-medio: 16px;
+  --radio-chico: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  min-height: 100%;
+  font-family: "Comic Sans MS", "Baloo 2", system-ui, sans-serif;
+  color: #2a1240;
+  overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(180deg, var(--cielo) 0%, var(--cielo-claro) 60%, var(--pasto) 100%);
+  min-height: 100vh;
+}
+
+/* ===== Cielo decorativo ===== */
+.cielo {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.sol {
+  position: absolute; top: 30px; right: 60px;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle, #ffe98a 0%, #ffd866 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(255, 216, 102, 0.6);
+  animation: rotar-sol 60s linear infinite;
+}
+@keyframes rotar-sol { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+.nube {
+  position: absolute;
+  width: 100px; height: 30px;
+  background: #fff;
+  border-radius: 50px;
+  opacity: 0.85;
+  filter: blur(0.3px);
+}
+.nube::before, .nube::after {
+  content: ""; position: absolute; background: #fff; border-radius: 50%;
+}
+.nube::before { width: 40px; height: 40px; top: -18px; left: 12px; }
+.nube::after  { width: 50px; height: 50px; top: -25px; left: 38px; }
+.nube-1 { top: 60px;  left: 10%; animation: deriva 40s linear infinite; }
+.nube-2 { top: 130px; left: 70%; animation: deriva 55s linear infinite reverse; }
+.nube-3 { top: 200px; left: 35%; animation: deriva 35s linear infinite;  opacity: 0.7; }
+@keyframes deriva {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-150px); }
+}
+
+/* ===== Botón "Volver al Hub" ===== */
+.boton-hub {
+  position: fixed; top: 14px; left: 14px; z-index: 100;
+  padding: 8px 16px; background: rgba(255, 255, 255, 0.85);
+  color: #2a1240; border: 2px solid var(--rosa-fuerte);
+  border-radius: 999px; font-family: inherit; font-size: 0.9rem;
+  font-weight: bold; text-decoration: none;
+  box-shadow: 0 3px 0 var(--rosa-fuerte);
+  transition: all 0.15s ease;
+}
+.boton-hub:hover { transform: translateY(-2px); }
+.boton-hub:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--rosa-fuerte); }
+
+/* ===== Layout principal ===== */
+.heladeria {
+  position: relative; z-index: 1;
+  max-width: 1000px; margin: 0 auto;
+  padding: 60px 20px 40px;
+}
+
+/* Sistema de pantallas */
+.pantalla {
+  display: none;
+  animation: aparecer 0.4s ease;
+}
+.pantalla.activa { display: block; }
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Caja central reutilizable ===== */
+.caja-central {
+  background: #fff;
+  border: 4px solid var(--rosa-fuerte);
+  border-radius: var(--radio-grande);
+  padding: 32px 28px;
+  text-align: center;
+  max-width: 580px;
+  margin: 60px auto;
+  box-shadow: var(--sombra);
+}
+
+.cono-grande {
+  font-size: 5rem;
+  margin-bottom: 8px;
+  display: inline-block;
+  animation: brincar-cono 1.5s ease-in-out infinite;
+}
+@keyframes brincar-cono {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-8px) rotate(3deg); }
+}
+.titulo-juego {
+  font-size: 2.4rem; margin: 8px 0;
+  color: #2a1240;
+  text-shadow: 2px 2px 0 #fff, 4px 4px 0 var(--rosa-fuerte);
+}
+.titulo-sec { font-size: 1.8rem; margin: 0 0 12px; color: #2a1240; }
+.subtitulo-juego {
+  font-size: 1.1rem; color: #5a3a1a; margin: 0 0 24px;
+}
+.rosa   { color: var(--rosa-fuerte); }
+.brillo { color: var(--naranja); text-shadow: 2px 2px 0 var(--amarillo); }
+.ayuda  { font-size: 0.85rem; color: #5a3a1a; margin-top: 18px; }
+
+/* ===== Botones estilo Mario (con sombra dura) ===== */
+.boton {
+  display: inline-block; margin: 6px;
+  padding: 14px 28px;
+  font-family: inherit; font-size: 1.1rem; font-weight: bold;
+  color: #fff;
+  background: linear-gradient(180deg, var(--amarillo), var(--naranja));
+  border: 3px solid #2a1240;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #2a1240;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  text-decoration: none;
+}
+.boton:hover { filter: brightness(1.08); }
+.boton:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #2a1240;
+}
+.boton:disabled {
+  background: #aaa; cursor: not-allowed;
+  box-shadow: 0 5px 0 #555;
+  opacity: 0.7;
+}
+.boton-pequeno { padding: 8px 16px; font-size: 0.9rem; }
+.boton-servir {
+  background: linear-gradient(180deg, var(--verde), #4eb88e);
+  font-size: 1.2rem; padding: 16px 32px;
+}
+.boton-delicioso {
+  background: linear-gradient(180deg, var(--verde), #4eb88e);
+  font-size: 1.4rem; padding: 18px 30px; margin: 8px;
+}
+.boton-puaj {
+  background: linear-gradient(180deg, var(--rosa), var(--rosa-fuerte));
+  font-size: 1.4rem; padding: 18px 30px; margin: 8px;
+}
+.boton-tecla {
+  display: inline-block;
+  background: rgba(0,0,0,0.25);
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-right: 6px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* ===== HUD ===== */
+.hud {
+  display: flex;
+  gap: 14px;
+  background: #fff;
+  border: 3px solid #2a1240;
+  border-radius: var(--radio-medio);
+  padding: 10px 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--sombra);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hud-bloque {
+  display: flex; align-items: center; gap: 6px;
+  font-weight: bold; color: #2a1240;
+}
+.hud-icono { font-size: 1.3rem; }
+.hud-label {
+  font-size: 0.7rem; text-transform: uppercase;
+  color: #5a3a1a; letter-spacing: 1px;
+}
+.hud-valor { font-size: 1.1rem; color: var(--rosa-fuerte); }
+.barra-pop {
+  width: 100px; height: 12px;
+  background: #f0d6c4; border: 2px solid #2a1240;
+  border-radius: 999px; overflow: hidden;
+}
+.barra-pop-fill {
+  width: 10%; height: 100%;
+  background: linear-gradient(90deg, var(--rosa), var(--rosa-fuerte));
+  transition: width 0.3s ease;
+}
+
+/* ===== ESCENARIO: Calle de la heladería ===== */
+.escenario {
+  position: relative;
+  background: linear-gradient(180deg, transparent 0%, transparent 50%, var(--pasto) 50%, var(--pasto-oscuro) 100%);
+  border: 3px solid #2a1240;
+  border-radius: var(--radio-medio);
+  min-height: 280px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+.acera {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, var(--pasto) 0%, var(--pasto-oscuro) 100%);
+  background-image:
+    radial-gradient(circle at 20% 50%, var(--pasto-oscuro) 2px, transparent 3px),
+    radial-gradient(circle at 80% 70%, var(--pasto-oscuro) 2px, transparent 3px),
+    radial-gradient(circle at 50% 30%, var(--pasto-oscuro) 2px, transparent 3px);
+  background-size: 60px 60px;
+}
+
+/* Heladería (carrito) */
+.heladeria-sprite {
+  position: absolute;
+  right: 30px; bottom: 0;
+  width: 220px; height: 220px;
+}
+.sombrilla {
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 100px;
+  background: repeating-conic-gradient(from 0deg at 50% 100%,
+    var(--rosa) 0deg 30deg,
+    #fff 30deg 60deg);
+  border-radius: 50% 50% 0 0;
+  border: 3px solid #2a1240;
+  border-bottom: none;
+}
+.sombrilla::after {
+  content: ""; position: absolute; top: -4px; left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 8px;
+  background: var(--rosa-fuerte); border-radius: 50%;
+  border: 2px solid #2a1240;
+}
+.mostrador {
+  position: absolute; bottom: 0; left: 10px; right: 10px;
+  height: 130px;
+  background: linear-gradient(180deg, #fff 0%, #f5e6cc 100%);
+  border: 3px solid #2a1240;
+  border-radius: var(--radio-chico);
+}
+.cartel {
+  position: absolute; top: -28px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--amarillo);
+  color: #2a1240;
+  padding: 4px 12px;
+  border: 2px solid #2a1240;
+  border-radius: var(--radio-chico);
+  font-weight: bold; font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 3px 0 #2a1240;
+}
+.munra-mascota {
+  position: absolute; top: 8px; right: 8px;
+  width: 50px; height: 50px;
+  background: radial-gradient(circle, var(--rosa) 0%, var(--rosa-fuerte) 100%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  border: 2px solid #2a1240;
+  animation: flotar-mascota 2s ease-in-out infinite;
+}
+.munra-mascota::before, .munra-mascota::after {
+  content: ""; position: absolute; top: 16px;
+  width: 8px; height: 10px; background: #fff;
+  border-radius: 50%; border: 1px solid #2a1240;
+}
+.munra-mascota::before { left: 12px; }
+.munra-mascota::after  { right: 12px; }
+@keyframes flotar-mascota {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+.juana-detras {
+  position: absolute; bottom: 60px; left: 50%;
+  transform: translateX(-50%);
+  width: 60px; height: 50px;
+}
+.juana-cabeza {
+  width: 50px; height: 50px;
+  background: #f4c69a;
+  border-radius: 50%;
+  border: 2px solid #2a1240;
+  margin: 0 auto;
+  position: relative;
+}
+.juana-cabeza::before {
+  content: ""; position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+  width: 52px; height: 24px;
+  background: #4a2d1a;
+  border-radius: 26px 26px 0 0;
+}
+.juana-cabeza::after {
+  content: "•   •";
+  position: absolute; top: 20px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem; letter-spacing: 6px;
+}
+
+/* Decoraciones que aparecen por nivel */
+.deco-nivel {
+  position: absolute; bottom: 0; left: -180px;
+  width: 200px; height: 100px;
+}
+.deco-mesa {
+  position: absolute; bottom: 5px; left: 10px;
+  width: 60px; height: 40px;
+  background: #d6b58a;
+  border: 2px solid #2a1240;
+  border-radius: var(--radio-chico);
+}
+.deco-flor {
+  position: absolute; bottom: 0; left: 80px;
+  width: 30px; height: 50px;
+  font-size: 2rem;
+}
+.deco-luces {
+  position: absolute; top: -20px; left: 0; right: 0;
+  text-align: center; font-size: 1rem;
+}
+
+/* Cliente que llega */
+.cliente-zona {
+  position: absolute; bottom: 0; left: 20px;
+  width: 160px; height: 200px;
+  pointer-events: none;
+}
+.cliente-sprite {
+  position: absolute; bottom: 0; left: 0;
+  width: 130px; height: 180px;
+  display: flex; align-items: flex-end; justify-content: center;
+  transition: transform 1s ease;
+}
+.cliente-sprite.entrando { animation: entrar-cliente 1s ease forwards; }
+.cliente-sprite.saliendo { animation: salir-cliente 0.8s ease forwards; }
+@keyframes entrar-cliente {
+  from { transform: translateX(-200px); }
+  to   { transform: translateX(0); }
+}
+@keyframes salir-cliente {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-200px); }
+}
+.cliente-globo {
+  position: absolute; top: 0; left: 70px;
+  background: #fff;
+  color: #2a1240;
+  border: 2px solid #2a1240;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  max-width: 180px;
+  box-shadow: 0 3px 0 #2a1240;
+  animation: aparecer 0.5s ease;
+}
+.cliente-globo::after {
+  content: ""; position: absolute; bottom: -8px; left: 20px;
+  border: 8px solid transparent; border-top-color: #fff;
+}
+
+/* ===== Zona de preparación ===== */
+.zona-preparacion {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  background: #fff;
+  border: 3px solid #2a1240;
+  border-radius: var(--radio-medio);
+  padding: 18px;
+  box-shadow: var(--sombra);
+}
+@media (max-width: 720px) {
+  .zona-preparacion { grid-template-columns: 1fr; }
+}
+.seccion-titulo {
+  margin: 0 0 12px;
+  font-size: 1.1rem; color: #2a1240;
+  border-bottom: 2px dashed #ccc;
+  padding-bottom: 6px;
+}
+
+/* Cono que se va llenando */
+.cono-area { text-align: center; }
+.cono-contenedor {
+  position: relative;
+  width: 140px; height: 220px;
+  margin: 0 auto 14px;
+  background: linear-gradient(180deg, #f8e8d0 0%, #ead0a8 100%);
+  border-radius: var(--radio-medio);
+  border: 2px dashed #ccc;
+}
+.cono-helado {
+  position: absolute; bottom: 70px; left: 0; right: 0;
+  display: flex; flex-direction: column-reverse;
+  align-items: center; padding: 0 20px;
+  min-height: 80px;
+}
+.cono-base {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  font-size: 4rem;
+}
+.scoop {
+  width: 80px; height: 36px;
+  margin-top: -10px;
+  border-radius: 50% 50% 50% 50% / 90% 90% 30% 30%;
+  border: 2px solid #2a1240;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  position: relative;
+  animation: caer-scoop 0.4s ease;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+}
+@keyframes caer-scoop {
+  from { transform: translateY(-40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.zona-acciones {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+}
+
+/* Paleta de ingredientes */
+.paleta-tabs {
+  display: flex; gap: 4px; margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 6px 12px;
+  background: #f0e4d0;
+  border: 2px solid #2a1240;
+  border-radius: var(--radio-chico);
+  font-family: inherit; font-size: 0.85rem; font-weight: bold;
+  color: #2a1240; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.tab:hover { background: #e0d4c0; }
+.tab.activa {
+  background: var(--amarillo);
+  box-shadow: 0 2px 0 #2a1240;
+}
+.paleta-ingredientes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.ingrediente {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 4px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: var(--radio-chico);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.ingrediente:hover {
+  border-color: var(--rosa-fuerte);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 rgba(255, 79, 156, 0.3);
+}
+.ingrediente:active { transform: translateY(0); box-shadow: none; }
+.ingrediente-emoji { font-size: 1.6rem; line-height: 1; }
+.ingrediente-nombre {
+  font-size: 0.65rem; margin-top: 2px;
+  color: #5a3a1a; text-align: center;
+}
+
+/* ===== REACCIÓN del cliente ===== */
+.reaccion-caja {
+  position: relative;
+}
+.cliente-grande {
+  width: 200px; height: 240px;
+  margin: 0 auto 16px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.reaccion-texto {
+  font-size: 2.2rem;
+  margin: 12px 0 6px;
+}
+.reaccion-frase {
+  font-size: 1.1rem;
+  color: #5a3a1a;
+  margin: 0 0 18px;
+  font-style: italic;
+}
+
+.papa-decide.oculto, .boton-continuar.oculto { display: none; }
+.papa-decide {
+  background: rgba(255, 216, 102, 0.18);
+  border: 2px dashed var(--naranja);
+  border-radius: var(--radio-medio);
+  padding: 14px 18px; margin-top: 12px;
+}
+.papa-instruccion {
+  margin: 0 0 10px; color: #2a1240; font-size: 1rem;
+}
+.papa-botones {
+  display: flex; justify-content: center; flex-wrap: wrap;
+}
+
+/* ===== PERSECUCIÓN ===== */
+.persecucion {
+  background: linear-gradient(180deg, #ffb84d 0%, var(--amarillo) 100%);
+  border-radius: var(--radio-grande);
+  padding: 16px;
+  border: 4px solid #2a1240;
+  box-shadow: var(--sombra);
+  margin: 20px 0;
+}
+.persecucion-hud {
+  text-align: center;
+  margin-bottom: 12px;
+}
+.persecucion-titulo {
+  font-size: 1.4rem;
+  color: #2a1240;
+  margin: 0 0 4px;
+  font-weight: bold;
+}
+.ayuda-persecucion {
+  font-size: 0.9rem; color: #2a1240; margin: 0;
+}
+.calle-escenario {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: #fff;
+  border: 3px solid #2a1240;
+  border-radius: var(--radio-medio);
+  overflow: hidden;
+}
+.calle-fondo {
+  position: absolute; inset: 0;
+}
+.cielo-calle {
+  position: absolute; top: 0; left: 0; right: 0; height: 55%;
+  background: linear-gradient(180deg, var(--cielo) 0%, var(--cielo-claro) 100%);
+}
+.acera-calle {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+  background: linear-gradient(180deg, var(--acera) 0%, var(--acera-oscura) 100%);
+}
+.linea-calle {
+  position: absolute; bottom: 25%; left: 0; right: 0; height: 4px;
+  background: repeating-linear-gradient(90deg,
+    #fff 0px, #fff 30px,
+    transparent 30px, transparent 60px);
+}
+#lienzo-persecucion {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+
+/* ===== Celebración de nivel ===== */
+.celebracion {
+  background: linear-gradient(160deg, #fff4dc 0%, #ffe9c2 100%);
+}
+.confeti {
+  font-size: 2.5rem; letter-spacing: 8px;
+  margin-bottom: 8px;
+  animation: confeti-anim 1s ease-in-out infinite alternate;
+}
+@keyframes confeti-anim {
+  from { transform: rotate(-5deg); }
+  to   { transform: rotate(5deg); }
+}
+.trofeo-nivel {
+  font-size: 5rem;
+  display: inline-block;
+  animation: girar-trofeo 2s ease-in-out infinite;
+  margin: 10px 0;
+}
+@keyframes girar-trofeo {
+  0%,100% { transform: scale(1) rotate(0); }
+  50%     { transform: scale(1.15) rotate(10deg); }
+}
+.texto-celebracion {
+  font-size: 1.2rem; color: #2a1240; margin: 12px 0;
+}
+.desbloqueos {
+  background: rgba(255, 79, 156, 0.12);
+  border: 2px dashed var(--rosa-fuerte);
+  border-radius: var(--radio-medio);
+  padding: 12px;
+  color: var(--rosa-fuerte);
+  font-weight: bold;
+  margin: 16px 0;
+}
+
+/* ===== Input del nombre de heladería ===== */
+.input-nombre {
+  display: block;
+  margin: 16px auto;
+  padding: 14px 20px;
+  width: 100%;
+  max-width: 360px;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--rosa-fuerte);
+  background: #fff;
+  border: 3px solid var(--rosa-fuerte);
+  border-radius: var(--radio-medio);
+  outline: none;
+  box-shadow: 0 3px 0 var(--rosa-fuerte);
+}
+.input-nombre:focus {
+  border-color: var(--naranja);
+  box-shadow: 0 3px 0 var(--naranja), 0 0 16px rgba(255, 122, 61, 0.4);
+}
+
+/* Util */
+.oculto { display: none !important; }

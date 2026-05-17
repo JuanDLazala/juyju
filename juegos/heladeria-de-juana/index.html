@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Heladería de Juana 🍦</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <a href="../../index.html" class="boton-hub" title="Volver al Mundo Mágico">← Mundo Mágico</a>
+
+  <div class="cielo" aria-hidden="true">
+    <div class="sol"></div>
+    <div class="nube nube-1"></div>
+    <div class="nube nube-2"></div>
+    <div class="nube nube-3"></div>
+  </div>
+
+  <main class="heladeria">
+
+    <!-- ===== PORTADA ===== -->
+    <section id="pantalla-portada" class="pantalla activa">
+      <div class="caja-central">
+        <div class="cono-grande">🍦</div>
+        <h1 class="titulo-juego">La <span class="rosa">Heladería</span> de <span class="brillo">Juana</span></h1>
+        <p class="subtitulo-juego">Inventa sabores locos. Sirve a tu familia. ¡Hazlos reír!</p>
+        <button class="boton" data-accion="empezar">Abrir la heladería</button>
+        <p class="ayuda">2 jugadores · <strong>Juana:</strong> Mouse / Flechas · <strong>Papá:</strong> Teclas <strong>D</strong> (delicioso) o <strong>P</strong> (¡puaj!) + <strong>WASD</strong> al huir</p>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA PRINCIPAL: LA HELADERÍA ===== -->
+    <section id="pantalla-tienda" class="pantalla">
+
+      <!-- HUD superior -->
+      <header class="hud">
+        <div class="hud-bloque">
+          <span class="hud-icono">⭐</span>
+          <span class="hud-label">Nivel</span>
+          <span class="hud-valor" id="hud-nivel">1</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-icono">🪙</span>
+          <span class="hud-label">Monedas</span>
+          <span class="hud-valor" id="hud-monedas">0</span>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-icono">💖</span>
+          <span class="hud-label">Popularidad</span>
+          <div class="barra-pop"><div id="barra-pop-fill" class="barra-pop-fill"></div></div>
+        </div>
+        <div class="hud-bloque">
+          <span class="hud-icono">🏪</span>
+          <span class="hud-label">Heladería</span>
+          <span class="hud-valor" id="hud-nombre-tienda">Sin nombre</span>
+        </div>
+      </header>
+
+      <!-- Escenario: la calle con la heladería -->
+      <div class="escenario">
+
+        <!-- Suelo / acera -->
+        <div class="acera"></div>
+
+        <!-- Cliente que entra -->
+        <div id="cliente-zona" class="cliente-zona">
+          <div id="cliente-sprite" class="cliente-sprite"></div>
+          <div id="cliente-globo" class="cliente-globo oculto"></div>
+        </div>
+
+        <!-- El carrito / heladería de Juana -->
+        <div id="heladeria-sprite" class="heladeria-sprite">
+          <div class="sombrilla"></div>
+          <div class="mostrador">
+            <div class="cartel" id="cartel-tienda">🍦 Heladería</div>
+            <div class="munra-mascota" id="munra-mascota"></div>
+            <div class="juana-detras">
+              <div class="juana-cabeza"></div>
+            </div>
+          </div>
+          <!-- Decoraciones por nivel -->
+          <div class="deco-nivel" id="deco-nivel"></div>
+        </div>
+      </div>
+
+      <!-- Área de preparación del helado -->
+      <div class="zona-preparacion">
+
+        <div class="cono-area">
+          <h3 class="seccion-titulo">Tu creación 🎨</h3>
+          <div class="cono-contenedor">
+            <div id="cono-helado" class="cono-helado">
+              <!-- Se va llenando con scoops dinámicos -->
+            </div>
+            <div class="cono-base">🍦</div>
+          </div>
+          <div class="zona-acciones">
+            <button class="boton boton-pequeno" data-accion="limpiar-cono">🗑️ Limpiar</button>
+            <button class="boton boton-servir" data-accion="servir" id="boton-servir" disabled>¡Sírvele! 🍨</button>
+          </div>
+        </div>
+
+        <div class="paleta-area">
+          <h3 class="seccion-titulo">Ingredientes 🥄</h3>
+          <div class="paleta-tabs">
+            <button class="tab activa" data-categoria="sabores">🍦 Sabores</button>
+            <button class="tab" data-categoria="toppings">🍬 Toppings</button>
+            <button class="tab" data-categoria="salsas">🍯 Salsas</button>
+            <button class="tab" data-categoria="locos">🤪 Locos</button>
+            <button class="tab" data-categoria="magicos">✨ Mágicos</button>
+          </div>
+          <div id="paleta-ingredientes" class="paleta-ingredientes"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ESCENA: REACCIÓN DEL CLIENTE ===== -->
+    <section id="pantalla-reaccion" class="pantalla">
+      <div class="caja-central reaccion-caja">
+        <div id="cliente-reaccion" class="cliente-grande"></div>
+        <h2 class="reaccion-texto" id="reaccion-texto"></h2>
+        <p class="reaccion-frase" id="reaccion-frase"></p>
+
+        <!-- Botones solo visibles cuando es papá decidiendo -->
+        <div id="papa-decide" class="papa-decide oculto">
+          <p class="papa-instruccion">🎮 <strong>PAPÁ</strong>, decide qué te pareció:</p>
+          <div class="papa-botones">
+            <button class="boton boton-delicioso" data-accion="papa-delicioso">
+              <span class="boton-tecla">D</span>
+              ¡DELICIOSO! 😋
+            </button>
+            <button class="boton boton-puaj" data-accion="papa-puaj">
+              <span class="boton-tecla">P</span>
+              ¡PUAJ! 🤢
+            </button>
+          </div>
+        </div>
+
+        <button class="boton boton-continuar oculto" id="boton-continuar" data-accion="siguiente-cliente">
+          Siguiente cliente
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== ESCENA: PERSECUCIÓN ===== -->
+    <section id="pantalla-persecucion" class="pantalla persecucion">
+      <div class="persecucion-hud">
+        <p class="persecucion-titulo">🏃 ¡Papá huye con el helado! Atrápalo, Juana!</p>
+        <p class="ayuda-persecucion">
+          <strong>Juana</strong> (flechas ← →) corre detrás · <strong>Papá</strong> (A D) huye
+        </p>
+      </div>
+
+      <div class="calle-escenario" id="calle-escenario">
+        <div class="calle-fondo">
+          <div class="cielo-calle"></div>
+          <div class="acera-calle"></div>
+          <div class="linea-calle"></div>
+          <div class="elementos-calle" id="elementos-calle"></div>
+        </div>
+        <canvas id="lienzo-persecucion" width="900" height="320"></canvas>
+      </div>
+    </section>
+
+    <!-- ===== ESCENA: SUBIR DE NIVEL ===== -->
+    <section id="pantalla-subir-nivel" class="pantalla">
+      <div class="caja-central celebracion">
+        <div class="confeti">🎉✨🎊✨🎉</div>
+        <h2 class="titulo-sec">¡Subiste de nivel!</h2>
+        <p class="texto-celebracion" id="texto-celebracion"></p>
+        <div class="trofeo-nivel" id="trofeo-nivel">⭐</div>
+        <p class="desbloqueos" id="desbloqueos"></p>
+        <button class="boton" data-accion="continuar-juego">¡Seguir vendiendo!</button>
+      </div>
+    </section>
+
+    <!-- ===== ESCENA: PONER NOMBRE A LA HELADERÍA (nivel 3) ===== -->
+    <section id="pantalla-nombre" class="pantalla">
+      <div class="caja-central">
+        <div class="cono-grande">🏆</div>
+        <h2 class="titulo-sec">¡Tu heladería es famosa!</h2>
+        <p class="subtitulo-juego">
+          Has trabajado duro, Juana. Llegaron tantos clientes que ahora <strong>todo el mundo</strong>
+          quiere conocer tu heladería.
+          <br><br>
+          ¡Es hora de ponerle un nombre!
+        </p>
+        <input type="text" id="input-nombre-tienda" class="input-nombre"
+               placeholder="Nombre de tu heladería..." maxlength="22" />
+        <p class="ayuda">Ejemplos: "Helados Munra", "La Cuchara Mágica", "Frosty Juana"…</p>
+        <button class="boton" data-accion="guardar-nombre">¡Inaugurar!</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="heladeria.js"></script>
+</body>
+</html>
