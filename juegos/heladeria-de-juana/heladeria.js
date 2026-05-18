@@ -301,10 +301,18 @@ function renderizarIngredientes() {
   });
 }
 
-function agregarIngrediente(ing) {
-  if (juego.helado.length >= 6) return;   // máximo 6 capas
+function agregarIngrediente(ing, event) {
+  if (juego.helado.length >= 6) return;
   juego.helado.push(ing);
   renderizarCono();
+
+  // Efectos: plop + brillitos en el cono
+  if (typeof sonidoPlop === 'function') sonidoPlop();
+  const cono = document.getElementById('cono-helado');
+  if (cono && typeof brillitos === 'function') {
+    const r = cono.getBoundingClientRect();
+    brillitos(r.left + r.width / 2, r.top + r.height / 2);
+  }
 }
 
 function renderizarCono() {
@@ -326,6 +334,7 @@ function renderizarCono() {
 function limpiarCono() {
   juego.helado = [];
   renderizarCono();
+  if (typeof sonidoLimpiar === 'function') sonidoLimpiar();
 }
 
 
@@ -358,48 +367,10 @@ function llegaCliente() {
   globo.classList.remove('oculto');
 }
 
-function svgCliente(c) {
-  // SVG sencillo pero distintivo, basado en personalidad
-  const peloPath = {
-    largo:   `<path d="M 25 30 Q 25 70 35 90 L 65 90 Q 75 70 75 30 Q 75 15 50 15 Q 25 15 25 30 Z" fill="${c.pelo}"/>`,
-    corto:   `<path d="M 28 35 Q 30 20 50 18 Q 70 20 72 35 L 72 45 L 28 45 Z" fill="${c.pelo}"/>`,
-    rizado:  `<path d="M 25 35 Q 25 15 50 15 Q 75 15 75 35 Q 78 38 75 42 Q 65 32 60 42 Q 50 32 40 42 Q 35 32 25 42 Q 22 38 25 35 Z" fill="${c.pelo}"/>`,
-    mono:    `<path d="M 30 40 Q 30 20 50 20 Q 70 20 70 40 L 70 45 L 30 45 Z" fill="${c.pelo}"/>
-              <circle cx="50" cy="12" r="10" fill="${c.pelo}"/>`,
-    punta:   `<path d="M 30 30 L 35 15 L 45 25 L 50 12 L 55 25 L 65 15 L 70 30 L 30 30 Z" fill="${c.pelo}"/>`,
-  }[c.pelo_estilo] || '';
-
-  const accesorio = c.accesorio === 'gafas'
-    ? '<circle cx="40" cy="48" r="6" fill="none" stroke="#1a1428" stroke-width="2"/><circle cx="60" cy="48" r="6" fill="none" stroke="#1a1428" stroke-width="2"/><line x1="46" y1="48" x2="54" y2="48" stroke="#1a1428" stroke-width="2"/>'
-    : c.accesorio === 'barba'
-    ? '<path d="M 35 65 Q 50 75 65 65 L 60 60 Q 50 65 40 60 Z" fill="' + c.pelo + '" opacity="0.85"/>'
-    : '';
-
-  const sonrisa = c.sonrisa === 'amplia'
-    ? '<path d="M 40 60 Q 50 70 60 60" stroke="#1a1428" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
-    : c.sonrisa === 'pícara'
-    ? '<path d="M 42 62 Q 52 65 58 60" stroke="#1a1428" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
-    : '<path d="M 42 60 Q 50 64 58 60" stroke="#1a1428" stroke-width="2" fill="none" stroke-linecap="round"/>';
-
-  return `
-<svg viewBox="0 0 100 180" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-  <!-- Cuerpo (ropa) -->
-  <path d="M 25 105 Q 25 95 35 95 L 65 95 Q 75 95 75 105 L 80 175 L 20 175 Z" fill="${c.color}" stroke="#1a1428" stroke-width="2"/>
-  <!-- Cabeza -->
-  <circle cx="50" cy="55" r="28" fill="#f4c69a" stroke="#1a1428" stroke-width="2"/>
-  ${peloPath}
-  <!-- Ojos -->
-  <circle cx="40" cy="50" r="3" fill="#1a1428"/>
-  <circle cx="60" cy="50" r="3" fill="#1a1428"/>
-  <circle cx="41" cy="49" r="1" fill="#fff"/>
-  <circle cx="61" cy="49" r="1" fill="#fff"/>
-  <!-- Mejillas -->
-  <circle cx="36" cy="58" r="3" fill="#ff7fb6" opacity="0.6"/>
-  <circle cx="64" cy="58" r="3" fill="#ff7fb6" opacity="0.6"/>
-  ${sonrisa}
-  ${accesorio}
-  ${c.emoji ? `<text x="50" y="170" text-anchor="middle" font-size="20">${c.emoji}</text>` : ''}
-</svg>`;
+/* Versión ANIME: usa el sistema modular de personajes.js */
+function svgCliente(c, estado) {
+  const perfilId = ID_A_PERFIL[c.id];
+  return svgPersonaje(perfilId || 'mama', estado || 'normal');
 }
 
 
@@ -442,30 +413,51 @@ function evaluarCombinacion(cliente, helado) {
 function aplicarReaccion(tipo) {
   juego.reaccionTipo = tipo;
   const c = juego.clienteActual;
-  let frases, texto, emoji;
+  let frases, texto, estadoEmocional;
+
   if (tipo === 'amor') {
     frases = c.reaccionesAmor;
     texto = '¡LE ENCANTÓ! 💖';
-    emoji = '😋';
+    estadoEmocional = 'enamorado';
   } else if (tipo === 'asco') {
     frases = c.reaccionesAsco;
     texto = '¡PUAAAJ! 🤢';
-    emoji = '🤮';
+    estadoEmocional = 'asqueado';
   } else {
     frases = c.reaccionesNeutral;
     texto = 'Mmm… 😐';
-    emoji = '😐';
+    estadoEmocional = 'pensativo';
   }
   const frase = frases[Math.floor(Math.random() * frases.length)];
+
+  // Re-dibujar el cliente con la expresión correcta
+  document.getElementById('cliente-reaccion').innerHTML = svgCliente(c, estadoEmocional);
+
   document.getElementById('reaccion-texto').textContent = texto;
   document.getElementById('reaccion-frase').textContent = '"' + frase + '"';
   document.getElementById('papa-decide').classList.add('oculto');
   document.getElementById('boton-continuar').classList.remove('oculto');
 
-  // Si fue asco y NO es papá → cliente se va sin pagar
-  // (papá tiene mecánica especial: huye → persecución)
+  // EFECTOS visuales según reacción
+  const rect = document.getElementById('cliente-reaccion').getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  if (tipo === 'amor') {
+    corazones(cx, cy);
+    sonidoRisa();
+    flashColor('rgba(255, 127, 182, 0.25)', 0.4);
+  } else if (tipo === 'asco') {
+    asco(cx, cy);
+    sonidoSusto();
+    temblarPantalla(8, 500);
+  } else {
+    sonidoDing();
+  }
+
+  // Si fue asco y es papá → huye y empieza persecución
   if (tipo === 'asco' && c.decideHumano) {
-    iniciarPersecucion();
+    setTimeout(() => iniciarPersecucion(), 1200);
     return;
   }
 
@@ -474,12 +466,14 @@ function aplicarReaccion(tipo) {
     juego.monedas += 10;
     juego.popularidad = Math.min(100, juego.popularidad + 8);
     juego.ventasNivel++;
+    setTimeout(() => monedasVolando(cx, cy, 5), 400);
   } else if (tipo === 'neutral') {
     juego.monedas += 5;
     juego.popularidad = Math.min(100, juego.popularidad + 2);
     juego.ventasNivel++;
+    setTimeout(() => monedasVolando(cx, cy, 2), 400);
   } else {
-    // asco con cliente automático: se va sin pagar pero +1 venta (es una experiencia)
+    // asco con cliente automático: se va sin pagar
     juego.popularidad = Math.max(0, juego.popularidad - 3);
   }
   actualizarHUD();
@@ -734,13 +728,23 @@ function subirDeNivel() {
   juego.ventasNivel = 0;
   const datos = NIVELES_DATA[juego.nivel - 1] || NIVELES_DATA[NIVELES_DATA.length - 1];
 
+  // Efectos: fanfare + flash + confeti enorme
+  if (typeof sonidoFanfare === 'function') sonidoFanfare();
+  if (typeof flashColor === 'function') flashColor('rgba(255, 216, 102, 0.4)', 0.6);
+  setTimeout(() => {
+    if (typeof confeti === 'function') {
+      confeti(window.innerWidth / 2, window.innerHeight / 3);
+      setTimeout(() => confeti(window.innerWidth / 3, window.innerHeight / 2), 200);
+      setTimeout(() => confeti(window.innerWidth * 2/3, window.innerHeight / 2), 400);
+    }
+  }, 100);
+
   // Nivel 3 → pedir nombre de la heladería
   if (juego.nivel === 3 && juego.nombreTienda === 'Sin nombre') {
     mostrarPantalla('pantalla-nombre');
     return;
   }
 
-  // Pantalla de celebración
   document.getElementById('texto-celebracion').textContent =
     '¡Bienvenida al nivel ' + juego.nivel + '! Tu heladería es cada día más famosa.';
   document.getElementById('desbloqueos').textContent = '🎁 ' + datos.desbloqueo;
