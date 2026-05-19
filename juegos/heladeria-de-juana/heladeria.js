@@ -261,10 +261,69 @@ const juego = {
 
 /* ========== 5. INICIO Y NAVEGACIÓN ========== */
 
+/* ----- Sistema de login ----- */
+const CLAVES = {
+  juana: 'TeAmoPapa',
+  papa:  'TeAmoJuanis'
+};
+let perfilSeleccionado = null;
+let perfilActivo = null;   // 'juana' | 'papa' — quién está jugando
+
 function mostrarPantalla(id) {
   document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
   document.getElementById(id).classList.add('activa');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function elegirPerfil(perfil) {
+  perfilSeleccionado = perfil;
+  const zona = document.getElementById('zona-clave');
+  zona.classList.remove('oculto');
+  const prompt = perfil === 'juana'
+    ? '¡Hola Juana! 💖 Escribe tu clave secreta:'
+    : '¡Hola Papá! 👨 Escribe tu clave secreta:';
+  document.getElementById('clave-prompt').textContent = prompt;
+  document.querySelectorAll('.perfil-card').forEach(c => c.classList.remove('seleccionado'));
+  const sel = document.querySelector(`[data-perfil="${perfil}"]`);
+  if (sel) sel.classList.add('seleccionado');
+  const input = document.getElementById('input-clave');
+  input.value = '';
+  input.classList.remove('incorrecta', 'correcta');
+  document.getElementById('clave-error').classList.add('oculto');
+  setTimeout(() => input.focus(), 250);
+}
+
+function verificarClave() {
+  if (!perfilSeleccionado) return;
+  const clave = document.getElementById('input-clave').value;
+  const correcta = CLAVES[perfilSeleccionado];
+  const input = document.getElementById('input-clave');
+  const error = document.getElementById('clave-error');
+
+  if (clave === correcta) {
+    perfilActivo = perfilSeleccionado;
+    input.classList.remove('incorrecta');
+    input.classList.add('correcta');
+    error.classList.add('oculto');
+    if (typeof sonidoFanfare === 'function') sonidoFanfare();
+    setTimeout(() => mostrarPantalla('pantalla-portada'), 600);
+  } else {
+    input.classList.remove('correcta');
+    input.classList.add('incorrecta');
+    error.classList.remove('oculto');
+    if (typeof sonidoSusto === 'function') sonidoSusto();
+    setTimeout(() => input.classList.remove('incorrecta'), 500);
+    input.value = '';
+    input.focus();
+  }
+}
+
+function cambiarPerfil() {
+  perfilSeleccionado = null;
+  document.getElementById('zona-clave').classList.add('oculto');
+  document.getElementById('input-clave').value = '';
+  document.getElementById('clave-error').classList.add('oculto');
+  document.querySelectorAll('.perfil-card').forEach(c => c.classList.remove('seleccionado'));
 }
 
 function empezarJuego() {
@@ -357,14 +416,23 @@ function llegaCliente() {
   juego.clienteActual = elegirSiguienteCliente();
   const c = juego.clienteActual;
 
+  // Sprite del cliente
   const zona = document.getElementById('cliente-sprite');
-  zona.innerHTML = svgCliente(c);
-  zona.classList.remove('saliendo');
-  zona.classList.add('entrando');
+  if (zona) {
+    zona.innerHTML = svgCliente(c);
+    zona.classList.remove('saliendo');
+    zona.classList.add('entrando');
+  }
 
-  const globo = document.getElementById('cliente-globo');
-  globo.textContent = c.pedido;
-  globo.classList.remove('oculto');
+  // Globo del pedido (nuevo HTML tiene #cliente-globo-titulo + #cliente-globo-texto)
+  const globo  = document.getElementById('cliente-globo');
+  const titulo = document.getElementById('cliente-globo-titulo');
+  const texto  = document.getElementById('cliente-globo-texto');
+  if (globo) {
+    globo.classList.remove('oculto');
+    if (titulo) titulo.textContent = 'Pedido de ' + c.nombre;
+    if (texto)  texto.textContent  = c.pedido;
+  }
 }
 
 /* Versión ANIME: usa el sistema modular de personajes.js */
@@ -523,11 +591,6 @@ function iniciarPersecucion() {
   persecucion.juana.x = 100; persecucion.juana.y = 220; persecucion.juana.vx = 0; persecucion.juana.vy = 0;
   persecucion.scroll = 0;
   persecucion.fin = false;
-
-  // Generar obstáculos en la calle
-  const elem = document.getElementById('elementos-calle');
-  elem.innerHTML = '';
-
   loopPersecucion();
 }
 
@@ -715,8 +778,12 @@ function actualizarHUD() {
 }
 
 function actualizarDecoracion() {
-  const datos = NIVELES_DATA[juego.nivel - 1];
+  // El nuevo HTML no tiene zona de decoración (la heladería ahora vive
+  // en el área del cliente). Mantenemos la función como no-op para
+  // futuras decoraciones.
   const deco = document.getElementById('deco-nivel');
+  if (!deco) return;
+  const datos = NIVELES_DATA[juego.nivel - 1];
   deco.innerHTML = '';
   if (datos.deco.includes('mesa'))  deco.innerHTML += '<div class="deco-mesa"></div>';
   if (datos.deco.includes('flor'))  deco.innerHTML += '<div class="deco-flor">🌸</div>';
@@ -728,7 +795,6 @@ function subirDeNivel() {
   juego.ventasNivel = 0;
   const datos = NIVELES_DATA[juego.nivel - 1] || NIVELES_DATA[NIVELES_DATA.length - 1];
 
-  // Efectos: fanfare + flash + confeti enorme
   if (typeof sonidoFanfare === 'function') sonidoFanfare();
   if (typeof flashColor === 'function') flashColor('rgba(255, 216, 102, 0.4)', 0.6);
   setTimeout(() => {
@@ -739,7 +805,6 @@ function subirDeNivel() {
     }
   }, 100);
 
-  // Nivel 3 → pedir nombre de la heladería
   if (juego.nivel === 3 && juego.nombreTienda === 'Sin nombre') {
     mostrarPantalla('pantalla-nombre');
     return;
@@ -773,7 +838,19 @@ function continuarJuego() {
 /* ========== 11. EVENTOS ========== */
 
 document.addEventListener('click', (e) => {
-  const accion = e.target.closest('[data-accion]')?.dataset.accion;
+  const el = e.target.closest('[data-accion]');
+  if (!el) return;
+  const accion = el.dataset.accion;
+
+  // ===== LOGIN =====
+  if (accion === 'elegir-perfil') {
+    elegirPerfil(el.dataset.perfil);
+    return;
+  }
+  if (accion === 'verificar-clave') { verificarClave(); return; }
+  if (accion === 'cambiar-perfil')  { cambiarPerfil();  return; }
+
+  // ===== JUEGO =====
   if (accion === 'empezar') empezarJuego();
   else if (accion === 'servir') servirHelado();
   else if (accion === 'limpiar-cono') limpiarCono();
@@ -784,33 +861,43 @@ document.addEventListener('click', (e) => {
   else if (accion === 'guardar-nombre') guardarNombre();
 
   // Tabs de categorías
-  const tab = e.target.closest('.tab');
+  const tab = e.target.closest('.tab-pill, .tab');
   if (tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('activa'));
+    document.querySelectorAll('.tab-pill, .tab').forEach(t => t.classList.remove('activa'));
     tab.classList.add('activa');
     juego.categoriaActiva = tab.dataset.categoria;
     renderizarIngredientes();
   }
 });
 
-// Teclado: papá decide + controles de persecución
+// Teclado
 window.addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
   persecucion.teclas[k] = true;
 
-  // En pantalla de reacción de papá
-  const reaccion = document.getElementById('pantalla-reaccion');
-  if (reaccion.classList.contains('activa')) {
+  // Enter en input de clave
+  if (e.key === 'Enter' && document.activeElement &&
+      document.activeElement.id === 'input-clave') {
+    e.preventDefault();
+    verificarClave();
+    return;
+  }
+
+  // Papá decide con D / P
+  const pantallaReac = document.getElementById('pantalla-reaccion');
+  if (pantallaReac && pantallaReac.classList.contains('activa')) {
     const c = juego.clienteActual;
-    if (c?.decideHumano && !document.getElementById('papa-decide').classList.contains('oculto')) {
+    const decideEl = document.getElementById('papa-decide');
+    if (c?.decideHumano && decideEl && !decideEl.classList.contains('oculto')) {
       if (k === 'd') papaDecide(true);
       else if (k === 'p') papaDecide(false);
     }
   }
 
   // Prevenir scroll con flechas durante persecución
-  if (document.getElementById('pantalla-persecucion').classList.contains('activa')) {
-    if (k.startsWith('arrow')) e.preventDefault();
+  const pantallaPers = document.getElementById('pantalla-persecucion');
+  if (pantallaPers && pantallaPers.classList.contains('activa') && k.startsWith('arrow')) {
+    e.preventDefault();
   }
 }, { passive: false });
 

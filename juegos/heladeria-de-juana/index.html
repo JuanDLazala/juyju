@@ -14,8 +14,51 @@
 
   <main class="heladeria">
 
+    <!-- ===== PANTALLA DE LOGIN (PRIMERA) ===== -->
+    <section id="pantalla-login" class="pantalla activa">
+      <div class="login-fondo" aria-hidden="true">
+        <img src="../../personajes/manga-selfie-juana-papa.jpeg" alt=""
+             class="login-bg-img" onerror="this.style.display='none'" />
+      </div>
+
+      <div class="login-content">
+        <div class="login-hero pop-in">
+          <img src="../../personajes/manga-selfie-juana-papa.jpeg" alt="Juana y Papá"
+               class="login-selfie" onerror="this.style.display='none'" />
+          <h1 class="titulo-juego">¿Quién <span class="text-accent">juega</span>?</h1>
+          <p class="subtitulo-juego">Escoge tu personaje para entrar a la Heladería 🍦</p>
+        </div>
+
+        <div class="perfiles-grid pop-in">
+          <button class="perfil-card perfil-juana" data-accion="elegir-perfil" data-perfil="juana">
+            <div class="perfil-foto perfil-foto-juana"></div>
+            <h2 class="perfil-nombre">JUANA</h2>
+            <span class="perfil-emoji">🎀</span>
+          </button>
+          <button class="perfil-card perfil-papa" data-accion="elegir-perfil" data-perfil="papa">
+            <div class="perfil-foto perfil-foto-papa"></div>
+            <h2 class="perfil-nombre">PAPÁ</h2>
+            <span class="perfil-emoji">👨</span>
+          </button>
+        </div>
+
+        <div id="zona-clave" class="zona-clave oculto">
+          <p class="clave-prompt" id="clave-prompt">Escribe tu clave secreta:</p>
+          <input type="password" id="input-clave" class="input-clave-cozy"
+                 placeholder="••••••••" autocomplete="off" />
+          <div class="clave-acciones">
+            <button class="btn-bubbly" data-accion="verificar-clave">Entrar 🔓</button>
+            <button class="btn-bubbly btn-sky" data-accion="cambiar-perfil">← Otro</button>
+          </div>
+          <p class="clave-error oculto" id="clave-error">
+            ¡Esa no es la clave, mi amor! Inténtalo otra vez 💕
+          </p>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== PORTADA ===== -->
-    <section id="pantalla-portada" class="pantalla activa">
+    <section id="pantalla-portada" class="pantalla">
       <div class="card-cozy portada-card pop-in">
         <img src="../../personajes/manga-cuerpo-entero.jpeg" alt="Juana"
              class="portada-img" onerror="this.style.display='none'" />
