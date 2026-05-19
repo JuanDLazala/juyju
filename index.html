@@ -4,47 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mundo Mágico de Juana y Papá</title>
+  <link rel="stylesheet" href="compartido/brand.css" />
+  <link rel="stylesheet" href="compartido/ui-kit.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-
-  <div class="estrellas-fondo" aria-hidden="true"></div>
+<body class="bg-cozy">
 
   <main class="hub">
 
-    <header class="hub-header">
-      <h1 class="hub-titulo">
-        Mundo <span class="rosa">Mágico</span> de
-        <span class="brillo">Juana</span> y <span class="azul">Papá</span>
-      </h1>
-      <p class="hub-subtitulo">Elige tu aventura ✨</p>
+    <header class="hub-header pop-in">
+      <img src="personajes/manga-selfie-juana-papa.jpeg" alt="Juana y Papá"
+           class="hub-selfie"
+           onerror="this.style.display='none'" />
+      <div class="hub-titulos">
+        <h1 class="hub-titulo">
+          Mundo <span class="text-accent">Mágico</span>
+        </h1>
+        <p class="hub-sub-titulo">de Juana <span class="text-accent">y</span> Papá</p>
+        <p class="hub-tagline">Una colección de aventuras hechas con amor ✨</p>
+      </div>
     </header>
 
-    <!-- Las tarjetas de juegos se generan dinámicamente desde el array JUEGOS de abajo.
-         Para agregar un juego nuevo: crea una carpeta en /juegos/ y agrega una entrada
-         al array. Ver instrucciones al final del archivo. -->
-    <section id="grid-juegos" class="hub-grid"></section>
+    <section id="grid-juegos" class="hub-grid pop-in"></section>
 
     <footer class="hub-footer">
-      <p>Hecho con 💖 por Papá y Juana &nbsp;·&nbsp; <span id="contador-juegos">…</span> aventuras disponibles</p>
+      <span>Hecho con 💗 por Papá y Juana</span>
+      <span class="hub-separador">·</span>
+      <span><strong id="contador-juegos">…</strong> aventuras disponibles</span>
     </footer>
 
   </main>
 
-  <!-- =========================================================
-       CATÁLOGO DE JUEGOS
-       Para agregar un juego nuevo, solo agrega un objeto aquí.
-       Campos:
-         id          — identificador único (debe coincidir con la carpeta)
-         nombre      — título visible
-         subtitulo   — frase corta
-         descripcion — texto descriptivo
-         emoji       — emoji grande de la tarjeta
-         color       — color firma (CSS válido)
-         ruta        — ruta al index.html del juego (o null si es próximo)
-         tags        — array de etiquetas pequeñas
-         estado      — 'disponible' | 'proximamente' | 'beta'
-       ========================================================= -->
   <script>
     const JUEGOS = [
       {
@@ -53,20 +43,18 @@
         subtitulo: 'Aventura nocturna estilo Pac-Man',
         descripcion: 'Recoge estrellas y cuentos antes de que papá te atrape. ¡Bebe la sopa mágica e invierte la persecución!',
         emoji: '🌙',
-        color: '#ff4f9c',
+        color: 'oklch(80% 0.10 230)',
         ruta: 'juegos/juana-no-quiere-dormir/index.html',
         tags: ['Pac-Man', '2 jugadores', 'Online'],
         estado: 'disponible'
       },
-      // 👇 Ejemplos de juegos futuros (placeholders). Cuando los construyas,
-      //    cambia `estado` a 'disponible' y agrega la `ruta`.
       {
         id: 'el-cuento-de-juana',
         nombre: 'Juana y Munra',
-        subtitulo: 'El cuento del dragón que aprendió a respirar',
-        descripcion: 'Conoce a Munra, la dragoncita que vive en tu corazón. Aprende 5 trucos mágicos para manejar la rabia cuando algo no sale como querías.',
+        subtitulo: 'El dragón que aprendió a respirar',
+        descripcion: 'Conoce a Munra, la dragoncita que vive en tu corazón. Aprende 5 trucos mágicos para manejar la rabia.',
         emoji: '🐉',
-        color: '#ffb0d4',
+        color: 'oklch(75% 0.15 20)',
         ruta: 'juegos/el-cuento-de-juana/index.html',
         tags: ['Cuento', 'Emociones', '1 jugador'],
         estado: 'disponible'
@@ -74,10 +62,10 @@
       {
         id: 'heladeria-de-juana',
         nombre: 'La Heladería de Juana',
-        subtitulo: 'Inventa helados locos, hace reír a papá',
-        descripcion: 'Mezcla sabores normales y disparatados. Sirve a la familia. ¡Si papá huye con el helado, persíguelo estilo Mario Bros! Estilo Avatar World 🍦',
+        subtitulo: 'Inventa helados locos, haz reír a papá',
+        descripcion: 'Mezcla sabores normales y disparatados. Sirve a la familia. ¡Si papá huye, persíguelo estilo Mario Bros!',
         emoji: '🍦',
-        color: '#ff7fb6',
+        color: 'oklch(78% 0.16 80)',
         ruta: 'juegos/heladeria-de-juana/index.html',
         tags: ['Cocina', '2 jugadores', 'Creativo'],
         estado: 'disponible'
@@ -88,42 +76,40 @@
         subtitulo: 'Lienzo digital con efectos',
         descripcion: 'Pinta con pinceles que dejan estelas de estrellas, fuego, agua y arcoíris.',
         emoji: '🎨',
-        color: '#7fd8c8',
+        color: 'oklch(80% 0.10 160)',
         ruta: null,
         tags: ['Creativo', 'Libre'],
         estado: 'proximamente'
       }
     ];
 
-    // ----- Renderizar tarjetas -----
     const grid = document.getElementById('grid-juegos');
     const disponibles = JUEGOS.filter(j => j.estado === 'disponible').length;
     document.getElementById('contador-juegos').textContent = disponibles;
 
-    JUEGOS.forEach(j => {
+    JUEGOS.forEach((j, i) => {
       const esJugable = j.estado === 'disponible' && j.ruta;
       const card = document.createElement(esJugable ? 'a' : 'div');
-      card.className = 'juego-card juego-' + j.estado;
+      card.className = 'juego-card ' + (esJugable ? '' : 'juego-proximamente');
       if (esJugable) card.href = j.ruta;
-      card.style.setProperty('--color-firma', j.color);
-
+      card.style.setProperty('--firma', j.color);
+      card.style.animationDelay = (i * 0.08) + 's';
       card.innerHTML = `
-        <div class="juego-emoji">${j.emoji}</div>
+        <div class="juego-emoji floating" style="animation-delay: ${i * 0.5}s">${j.emoji}</div>
         <h2 class="juego-nombre">${j.nombre}</h2>
         <p class="juego-subtitulo">${j.subtitulo}</p>
         <p class="juego-descripcion">${j.descripcion}</p>
         <div class="juego-tags">
-          ${j.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+          ${j.tags.map(t => `<span class="tag-cozy">${t}</span>`).join('')}
         </div>
         <div class="juego-cta">
           ${esJugable
-            ? '<span class="cta-jugar">▶ Jugar</span>'
-            : '<span class="cta-proximo">' + (j.estado === 'beta' ? '🧪 Beta' : '🔒 Próximamente') + '</span>'}
+            ? '<span class="btn-bubbly btn-sun">▶ Jugar</span>'
+            : '<span class="cta-proximo">🔒 Próximamente</span>'}
         </div>
       `;
       grid.appendChild(card);
     });
   </script>
-
 </body>
 </html>

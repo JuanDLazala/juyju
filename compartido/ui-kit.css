@@ -1,0 +1,262 @@
+/* ============================================================
+   UI Kit Bubbly — Botones, cards, pills, animaciones cozy
+   Requiere brand.css cargado antes.
+   ============================================================ */
+
+/* ===== Botón Bubbly (el principal) ===== */
+.btn-bubbly {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  box-shadow: var(--shadow-bubbly-accent);
+  text-decoration: none;
+  transition: transform 0.2s var(--ease-bouncy),
+              box-shadow 0.2s var(--ease-bouncy),
+              filter 0.15s ease;
+  user-select: none;
+}
+.btn-bubbly:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--accent-d);
+  filter: brightness(1.05);
+}
+.btn-bubbly:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--accent-d);
+}
+
+/* Variantes de color */
+.btn-mint  { background: var(--mint-d);     color: var(--fg); box-shadow: 0 4px 0 oklch(65% 0.10 160); }
+.btn-sky   { background: var(--sky-d);      color: var(--fg); box-shadow: 0 4px 0 oklch(60% 0.10 230); }
+.btn-sun   { background: var(--sun);        color: var(--fg); box-shadow: 0 4px 0 var(--sun-d); }
+.btn-dark  { background: var(--fg);         color: var(--surface); box-shadow: 0 4px 0 oklch(15% 0.04 40); }
+
+.btn-mint:hover  { box-shadow: 0 6px 0 oklch(65% 0.10 160); }
+.btn-sky:hover   { box-shadow: 0 6px 0 oklch(60% 0.10 230); }
+.btn-sun:hover   { box-shadow: 0 6px 0 var(--sun-d); }
+.btn-dark:hover  { box-shadow: 0 6px 0 oklch(15% 0.04 40); }
+
+.btn-bubbly:disabled {
+  background: var(--border); color: var(--fg-soft);
+  cursor: not-allowed; transform: none;
+  box-shadow: 0 4px 0 var(--border-d);
+  filter: saturate(0.5);
+}
+.btn-bubbly[disabled]:hover { transform: none; }
+
+/* ===== Card cozy ===== */
+.card-cozy {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+}
+.card-cozy.dashed { border-style: dashed; }
+
+/* ===== Stats Pill (HUD) ===== */
+.stats-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--border);
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--fg);
+  box-shadow: var(--shadow-bubbly-md);
+}
+.stats-pill .icon { font-size: 1.3rem; }
+.stats-pill .label {
+  font-size: 0.7rem; text-transform: uppercase;
+  opacity: 0.6; letter-spacing: 1px; margin-right: 4px;
+}
+.stats-pill .val {
+  font-size: 1.2rem; color: var(--accent);
+}
+
+/* ===== Barra de progreso (felicidad, popularidad) ===== */
+.progress-bg {
+  width: 140px; height: 14px;
+  background: var(--border);
+  border-radius: var(--r-pill);
+  border: 2px solid var(--border-d);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--sun));
+  transition: width 0.5s var(--ease-bouncy);
+  border-radius: var(--r-pill);
+}
+
+/* ===== Burbuja de diálogo (orden del cliente, etc.) ===== */
+.bubble {
+  position: relative;
+  background: var(--surface);
+  border: 3px solid var(--sky);
+  border-radius: var(--r-md);
+  padding: 14px 20px;
+  color: var(--fg);
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-card);
+  max-width: 240px;
+}
+.bubble::after {
+  content: '';
+  position: absolute; bottom: -14px; left: 24px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 14px solid var(--sky);
+}
+.bubble .titulo {
+  font-family: var(--font-display);
+  color: var(--accent);
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+.bubble.bubble-mint { border-color: var(--mint-d); }
+.bubble.bubble-mint::after { border-top-color: var(--mint-d); }
+.bubble.bubble-sun { border-color: var(--sun-d); }
+.bubble.bubble-sun::after { border-top-color: var(--sun-d); }
+
+/* ===== Ingrediente / Slot ===== */
+.slot {
+  width: 70px; height: 70px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--r-md);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-bouncy);
+  user-select: none;
+}
+.slot:hover {
+  transform: scale(1.12) rotate(-4deg);
+  border-color: var(--accent);
+  border-style: solid;
+  background: var(--bg);
+  box-shadow: 0 6px 16px rgba(244, 168, 184, 0.25);
+}
+.slot:active { transform: scale(0.95); }
+
+/* ===== Tab pill ===== */
+.tab-pill {
+  padding: 8px 16px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--fg-soft);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-bouncy);
+}
+.tab-pill:hover { transform: translateY(-2px); }
+.tab-pill.activa {
+  background: var(--accent); color: #fff;
+  border-color: var(--accent-d);
+  box-shadow: var(--shadow-bubbly-accent);
+}
+
+/* ===== Animaciones cozy reutilizables ===== */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-12px) rotate(2deg); }
+}
+.floating { animation: float-slow 4s ease-in-out infinite; }
+
+@keyframes pop-in {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.pop-in { animation: pop-in 0.45s var(--ease-bouncy); }
+
+@keyframes bump {
+  0%, 100% { transform: scale(1) rotate(0); }
+  40%      { transform: scale(1.25) rotate(8deg); }
+  70%      { transform: scale(0.95) rotate(-4deg); }
+}
+.bump { animation: bump 0.4s var(--ease-bouncy); }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25%      { transform: rotate(-3deg); }
+  75%      { transform: rotate(3deg); }
+}
+.wiggle { animation: wiggle 0.6s ease-in-out infinite; }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(244, 168, 184, 0); }
+  50%      { box-shadow: 0 0 24px rgba(244, 168, 184, 0.6); }
+}
+.pulse-glow { animation: pulse-glow 1.8s ease-in-out infinite; }
+
+/* ===== Botón "Volver al Hub" estandarizado ===== */
+.boton-hub-cozy {
+  position: fixed; top: 16px; left: 16px; z-index: 100;
+  padding: 10px 18px;
+  background: var(--surface);
+  color: var(--fg);
+  border: 2px solid var(--border);
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: var(--shadow-bubbly-md);
+  transition: all 0.2s var(--ease-bouncy);
+}
+.boton-hub-cozy:hover {
+  transform: translateY(-2px);
+  background: var(--sun);
+  box-shadow: 0 6px 0 var(--sun-d);
+}
+.boton-hub-cozy:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--border-d);
+}
+
+/* ===== Avatar / retrato ===== */
+.avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  object-fit: cover;
+  object-position: top;
+  box-shadow: var(--shadow-card);
+}
+.avatar-lg {
+  width: 200px; height: 200px;
+}
+.avatar-cuerpo {
+  height: 320px; width: auto;
+  border-radius: 0; border: none;
+  background: transparent; box-shadow: none;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.15));
+}
+
+/* ===== Utilidades ===== */
+.oculto { display: none !important; }
+.text-accent { color: var(--accent); }
+.text-mint   { color: var(--mint-d); }
+.text-sky    { color: var(--sky-d); }
+
+.flex-row { display: flex; gap: 14px; align-items: center; }
+.flex-col { display: flex; flex-direction: column; gap: 14px; }
+.flex-center { display: flex; align-items: center; justify-content: center; }

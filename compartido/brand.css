@@ -1,0 +1,75 @@
+/* ============================================================
+   "Mundo Mágico" — Brand System
+   Inspirado en Nintendo Cozy (Animal Crossing/Kirby) + Studio Ghibli
+   Bubbly, soft, emotional, handmade.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Varela+Round&display=swap');
+
+:root {
+  /* --- Paleta OKLch (cálida, pastel) --- */
+  --bg:        oklch(97% 0.018 70);   /* Crema Vainilla */
+  --surface:   oklch(99% 0.008 70);   /* Soft Paper */
+  --fg:        oklch(25% 0.04 40);    /* Chocolate Cálido */
+  --fg-soft:   oklch(45% 0.04 40);    /* Chocolate suave */
+  --accent:    oklch(75% 0.15 20);    /* Fresa Pastel */
+  --accent-d:  oklch(65% 0.15 20);    /* Fresa Profunda (sombra) */
+  --mint:      oklch(92% 0.08 160);   /* Menta */
+  --mint-d:    oklch(80% 0.10 160);
+  --sky:       oklch(90% 0.06 230);   /* Cielo */
+  --sky-d:     oklch(80% 0.10 230);
+  --sun:       oklch(92% 0.13 90);    /* Sol cálido */
+  --sun-d:     oklch(78% 0.16 80);
+  --lavender:  oklch(88% 0.08 300);
+  --border:    oklch(90% 0.02 70);    /* Borde galleta */
+  --border-d:  oklch(75% 0.03 70);
+
+  /* --- Fuentes --- */
+  --font-display: 'Fredoka', 'Varela Round', system-ui, sans-serif;
+  --font-body:    'Varela Round', 'Fredoka', system-ui, sans-serif;
+
+  /* --- Radios --- */
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 32px;
+  --r-xl: 50px;
+  --r-pill: 999px;
+
+  /* --- Sombras --- */
+  --shadow-soft: 0 8px 16px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-bubbly-sm: 0 3px 0 var(--border-d);
+  --shadow-bubbly-md: 0 4px 0 var(--border-d);
+  --shadow-bubbly-lg: 0 6px 0 var(--border-d);
+  --shadow-bubbly-accent: 0 4px 0 var(--accent-d);
+
+  /* --- Curvas de animación --- */
+  --ease-bouncy: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base reset + tipografía */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--font-body);
+  color: var(--fg);
+  background: var(--bg);
+}
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; }
+
+/* Fondo con patrón sutil de puntos (textura "papel") */
+.bg-cozy {
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--border) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+}
+
+/* Fondo decorativo (variante nocturna para Pac-Man / Munra) */
+.bg-noche {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(244, 168, 184, 0.18), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.18), transparent 45%),
+    linear-gradient(180deg, #14163a 0%, #1f2350 100%);
+  color: var(--surface);
+}
