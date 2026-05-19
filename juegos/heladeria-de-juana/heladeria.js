@@ -769,12 +769,23 @@ function finPersecucion() {
 /* ========== 10. HUD Y NIVELES ========== */
 
 function actualizarHUD() {
-  document.getElementById('hud-nivel').textContent = juego.nivel;
-  document.getElementById('hud-monedas').textContent = juego.monedas;
-  document.getElementById('barra-pop-fill').style.width = juego.popularidad + '%';
-  document.getElementById('hud-nombre-tienda').textContent = juego.nombreTienda;
-  document.getElementById('cartel-tienda').textContent =
-    '🍦 ' + (juego.nombreTienda === 'Sin nombre' ? 'Heladería' : juego.nombreTienda);
+  // Helper seguro: solo actualiza si el elemento existe
+  const setTxt = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+  const setStyle = (id, prop, val) => {
+    const el = document.getElementById(id);
+    if (el) el.style[prop] = val;
+  };
+
+  setTxt('hud-nivel', juego.nivel);
+  setTxt('hud-monedas', juego.monedas);
+  setStyle('barra-pop-fill', 'width', juego.popularidad + '%');
+  setTxt('hud-nombre-tienda',
+    juego.nombreTienda === 'Sin nombre' ? 'Heladería' : juego.nombreTienda);
+  setTxt('cartel-tienda',
+    '🍦 ' + (juego.nombreTienda === 'Sin nombre' ? 'Heladería' : juego.nombreTienda));
 }
 
 function actualizarDecoracion() {
@@ -838,17 +849,20 @@ function continuarJuego() {
 /* ========== 11. EVENTOS ========== */
 
 document.addEventListener('click', (e) => {
+  // 1) PRIMERO: chequear tabs (que NO tienen data-accion)
+  const tab = e.target.closest('.tab-pill, .tab');
+  if (tab && tab.dataset.categoria) {
+    document.querySelectorAll('.tab-pill, .tab').forEach(t => t.classList.remove('activa'));
+    tab.classList.add('activa');
+    juego.categoriaActiva = tab.dataset.categoria;
+    renderizarIngredientes();
+    return;
+  }
+
+  // 2) Después: chequear acciones (data-accion)
   const el = e.target.closest('[data-accion]');
   if (!el) return;
   const accion = el.dataset.accion;
-
-  // ===== LOGIN =====
-  if (accion === 'elegir-perfil') {
-    elegirPerfil(el.dataset.perfil);
-    return;
-  }
-  if (accion === 'verificar-clave') { verificarClave(); return; }
-  if (accion === 'cambiar-perfil')  { cambiarPerfil();  return; }
 
   // ===== JUEGO =====
   if (accion === 'empezar') empezarJuego();
@@ -860,14 +874,7 @@ document.addEventListener('click', (e) => {
   else if (accion === 'continuar-juego') continuarJuego();
   else if (accion === 'guardar-nombre') guardarNombre();
 
-  // Tabs de categorías
-  const tab = e.target.closest('.tab-pill, .tab');
-  if (tab) {
-    document.querySelectorAll('.tab-pill, .tab').forEach(t => t.classList.remove('activa'));
-    tab.classList.add('activa');
-    juego.categoriaActiva = tab.dataset.categoria;
-    renderizarIngredientes();
-  }
+  // (Tabs ya manejadas arriba)
 });
 
 // Teclado
