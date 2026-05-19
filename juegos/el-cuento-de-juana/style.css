@@ -1,44 +1,24 @@
 /* ============================================================
-   "Juana y Munra" — Estilo del cuento interactivo
-   Estética manga/kawaii nocturna, mismo universo del Mundo Mágico.
+   "Juana y Munra" — Estilo cozy nocturno
+   Hereda brand.css + ui-kit.css del /compartido/
+   Identidad: cielo nocturno mágico + estética cozy
    ============================================================ */
 
-:root {
-  --noche-profunda: #0e1336;
-  --noche-suave: #1c2256;
-  --crema: #fff4dc;
-  --crema-suave: #ffe9c2;
-  --rosa-juana: #ff7fb6;
-  --rosa-fuerte: #ff4f9c;
-  --amarillo-estrella: #ffd866;
-  --morado-sopa: #c084fc;
-  --verde-magia: #95e1c1;
-  --azul-cielo: #6ec1e4;
-  --rosa-munra: #ffb0d4;
-  --rosa-munra-oscuro: #d96aa1;
-  --munra-vientre: #fff0e0;
-  --fuego-1: #ff7a3d;
-  --fuego-2: #ffd866;
-  --humo: #bcc7e0;
-  --sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --radio-grande: 24px;
-  --radio-medio: 16px;
-  --radio-chico: 10px;
+/* Fondo nocturno mágico (identidad del cuento) */
+body.bg-noche-cuento {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(244, 168, 184, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.18), transparent 45%),
+    linear-gradient(180deg, oklch(20% 0.05 270) 0%, oklch(28% 0.06 280) 100%);
+  color: var(--crema, #fff4dc);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: "Comic Sans MS", "Quicksand", "Trebuchet MS", system-ui, sans-serif;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(255, 127, 182, 0.15), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.18), transparent 45%),
-    linear-gradient(180deg, #0a0e2a 0%, #161a45 100%);
-  color: var(--crema);
-  overflow-x: hidden;
+/* Sobrescribo algunas variables para el contexto nocturno */
+.bg-noche-cuento {
+  --fg-noche: #fff4dc;
+  --fg-soft-noche: #d8c8a8;
 }
 
 /* Estrellas titilantes */
@@ -62,89 +42,84 @@ html, body {
 .estrellas-fondo::after { animation-delay: 1.4s; opacity: 0.6; transform: translate(40px, -25px); }
 @keyframes titilar { from { opacity: 0.35; } to { opacity: 1; } }
 
-/* Botón "Volver al Hub" */
-.boton-hub {
-  position: fixed; top: 14px; left: 14px; z-index: 100;
-  padding: 8px 16px; background: rgba(14, 19, 54, 0.85);
-  color: var(--crema); border: 1.5px solid rgba(255, 244, 220, 0.3);
-  border-radius: 999px; font-family: inherit; font-size: 0.9rem;
-  font-weight: bold; text-decoration: none; backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
-}
-.boton-hub:hover {
-  background: var(--amarillo-estrella); color: #2a1240;
-  border-color: var(--amarillo-estrella); transform: translateX(-2px);
-}
-
-/* Layout principal */
+/* Layout */
 .cuento {
   position: relative; z-index: 1;
-  min-height: 100vh; padding: 60px 20px 40px;
+  min-height: 100vh; padding: 70px 20px 40px;
   display: flex; align-items: center; justify-content: center;
 }
 
 /* Sistema de escenas */
 .escena {
   width: 100%; max-width: 720px;
-  display: none; animation: aparecer 0.5s ease;
+  display: none; animation: pop-in 0.5s var(--ease-bouncy);
 }
 .escena.activa { display: block; }
-@keyframes aparecer {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 
-/* Contenedor central (portada, mini-juegos, diploma) */
+/* ===== CARDS COZY NOCTURNAS ===== */
 .contenedor-central {
-  background: linear-gradient(160deg, rgba(28, 34, 86, 0.92), rgba(58, 63, 138, 0.88));
-  border: 2px solid rgba(255, 244, 220, 0.18);
-  border-radius: var(--radio-grande);
+  background: linear-gradient(160deg,
+    oklch(35% 0.07 280 / 0.85),
+    oklch(45% 0.08 290 / 0.80));
+  border: 3px solid oklch(70% 0.10 280 / 0.4);
+  border-radius: var(--r-lg);
   padding: 40px 32px;
   text-align: center;
-  box-shadow: var(--sombra-suave), 0 0 60px rgba(192, 132, 252, 0.15) inset;
-  backdrop-filter: blur(6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 60px rgba(192,132,252,0.15) inset;
+  backdrop-filter: blur(8px);
 }
 
-/* Contenedor de escena (con Munra arriba + texto + opciones) */
 .contenedor-escena {
-  background: linear-gradient(160deg, rgba(28, 34, 86, 0.92), rgba(58, 63, 138, 0.88));
-  border: 2px solid rgba(255, 244, 220, 0.18);
-  border-radius: var(--radio-grande);
+  background: linear-gradient(160deg,
+    oklch(35% 0.07 280 / 0.85),
+    oklch(45% 0.08 290 / 0.80));
+  border: 3px solid oklch(70% 0.10 280 / 0.4);
+  border-radius: var(--r-lg);
   padding: 30px 28px;
-  box-shadow: var(--sombra-suave);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
 }
 
-/* Portada */
+/* ===== Portada ===== */
 .titulo-cuento {
-  font-size: clamp(2rem, 5vw, 3.2rem); margin: 16px 0 8px;
-  text-shadow: 0 4px 0 rgba(0,0,0,0.25), 0 0 24px rgba(255, 127, 182, 0.5);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 16px 0 8px;
+  color: var(--crema);
+  text-shadow: 0 4px 0 rgba(0,0,0,0.25), 0 0 24px rgba(255,127,182,0.5);
 }
 .subtitulo-cuento {
-  font-size: 1.15rem; color: var(--crema-suave);
-  font-style: italic; margin: 0 0 28px;
+  font-size: 1.15rem;
+  color: oklch(85% 0.04 70);
+  font-style: italic;
+  margin: 0 0 28px;
 }
 .autor {
-  margin-top: 18px; color: rgba(255, 244, 220, 0.5);
-  font-size: 0.85rem; font-style: italic;
+  margin-top: 18px;
+  color: oklch(75% 0.03 70 / 0.6);
+  font-size: 0.85rem;
+  font-style: italic;
 }
-.rosa   { color: var(--rosa-juana); }
-.brillo { color: var(--amarillo-estrella); text-shadow: 0 0 12px rgba(255, 216, 102, 0.7); }
+.rosa   { color: var(--rosa-juana, #ff7fb6); }
+.brillo { color: var(--amarillo-estrella, #ffd866); text-shadow: 0 0 12px rgba(255,216,102,0.7); }
 
-/* Encabezado de capítulo */
+/* Encabezado capítulo */
 .encabezado-escena {
   display: flex; align-items: baseline; gap: 12px;
   margin-bottom: 16px; padding-bottom: 12px;
-  border-bottom: 1px dashed rgba(255, 244, 220, 0.2);
+  border-bottom: 1px dashed oklch(70% 0.10 280 / 0.4);
 }
 .capitulo-numero {
-  font-size: 0.85rem; color: var(--amarillo-estrella);
+  font-family: var(--font-display);
+  font-size: 0.85rem; color: var(--amarillo-estrella, #ffd866);
   text-transform: uppercase; letter-spacing: 2px; font-weight: bold;
 }
 .capitulo-titulo {
-  font-size: 1.2rem; color: var(--crema);
+  font-size: 1.2rem;
+  color: var(--crema);
 }
 
-/* Zona de Munra */
+/* Munra */
 .zona-munra {
   position: relative;
   display: flex; align-items: center; justify-content: center;
@@ -153,48 +128,51 @@ html, body {
 .munra-grande  { width: 200px; height: 200px; }
 .munra-mediano { width: 140px; height: 140px; }
 
-/* Globo de diálogo de Munra */
 .munra-globo {
   position: absolute; right: 10%; top: 0;
-  background: var(--crema); color: #2a1240;
-  padding: 10px 14px; border-radius: 16px;
+  background: var(--surface, #fff);
+  color: var(--fg, #2a1240);
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  border: 2px solid var(--accent);
   font-size: 0.9rem; max-width: 200px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  animation: flotar 2s ease-in-out infinite;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+  animation: float-slow 2s ease-in-out infinite;
 }
 .munra-globo::after {
   content: ""; position: absolute; bottom: -8px; left: 30%;
-  border: 8px solid transparent; border-top-color: var(--crema);
-}
-@keyframes flotar {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-4px); }
+  border: 8px solid transparent; border-top-color: var(--accent);
 }
 
-/* Texto narrativo */
 .texto-escena {
   font-size: 1.1rem; line-height: 1.6;
-  color: var(--crema-suave); margin: 16px 0 24px;
+  color: var(--crema-suave, #ffe9c2);
+  margin: 16px 0 24px;
 }
-.texto-escena strong { color: var(--amarillo-estrella); }
+.texto-escena strong { color: var(--amarillo-estrella, #ffd866); }
 
-/* Opciones (3 botones grandes) */
+/* Opciones (botones grandes) */
 .zona-opciones {
   display: flex; flex-direction: column; gap: 12px;
 }
 .opcion-btn {
   display: flex; align-items: center; gap: 14px;
-  padding: 16px 20px; border-radius: var(--radio-medio);
-  border: 2px solid rgba(255, 244, 220, 0.2);
-  background: rgba(14, 19, 54, 0.55);
-  color: var(--crema); font-family: inherit; font-size: 1rem;
-  text-align: left; cursor: pointer;
-  transition: all 0.15s ease;
+  padding: 16px 20px;
+  border-radius: var(--r-md);
+  border: 2px solid oklch(70% 0.10 280 / 0.4);
+  background: oklch(28% 0.05 280 / 0.6);
+  color: var(--crema);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-bouncy);
 }
 .opcion-btn:hover {
-  border-color: var(--amarillo-estrella);
-  transform: translateX(4px);
-  background: rgba(255, 216, 102, 0.1);
+  border-color: var(--amarillo-estrella, #ffd866);
+  transform: translateX(6px);
+  background: oklch(35% 0.08 280 / 0.7);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 .opcion-emoji { font-size: 1.8rem; flex-shrink: 0; }
 .opcion-texto { flex: 1; }
@@ -202,172 +180,201 @@ html, body {
 /* Consecuencia */
 .texto-consecuencia {
   font-size: 1.05rem; color: var(--crema);
-  background: rgba(14, 19, 54, 0.5);
-  padding: 16px 20px; border-radius: var(--radio-medio);
-  border-left: 3px solid var(--morado-sopa);
+  background: oklch(28% 0.06 280 / 0.5);
+  padding: 16px 20px;
+  border-radius: var(--r-md);
+  border-left: 4px solid var(--morado-sopa, #c084fc);
 }
 .texto-reflexion {
-  margin: 16px 0; padding: 14px 18px;
-  background: rgba(255, 216, 102, 0.12);
-  border-radius: var(--radio-medio);
-  border: 1px dashed var(--amarillo-estrella);
-  color: var(--amarillo-estrella);
+  margin: 16px 0;
+  padding: 14px 18px;
+  background: oklch(50% 0.10 80 / 0.18);
+  border-radius: var(--r-md);
+  border: 1.5px dashed var(--amarillo-estrella, #ffd866);
+  color: var(--amarillo-estrella, #ffd866);
   font-style: italic;
 }
 
-/* Botón estándar */
+/* Botón cuento (estilo bubbly cozy adaptado a nocturno) */
 .boton-cuento {
-  display: inline-block; margin: 10px 6px;
-  padding: 14px 28px; font-family: inherit; font-size: 1.05rem;
-  font-weight: bold; color: #2a1240;
-  background: linear-gradient(180deg, var(--amarillo-estrella), #ffb84d);
-  border: none; border-radius: 999px; cursor: pointer;
-  box-shadow: 0 5px 0 #b9740a, 0 10px 24px rgba(255, 184, 77, 0.35);
+  display: inline-block;
+  margin: 10px 6px;
+  padding: 14px 28px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2a1240;
+  background: linear-gradient(180deg, var(--amarillo-estrella, #ffd866), #ffb84d);
+  border: none;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  box-shadow: 0 5px 0 #b9740a, 0 10px 24px rgba(255,184,77,0.35);
   text-decoration: none;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.15s var(--ease-bouncy), box-shadow 0.15s var(--ease-bouncy);
 }
-.boton-cuento:hover { filter: brightness(1.05); }
+.boton-cuento:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 #b9740a;
+  filter: brightness(1.05);
+}
 .boton-cuento:active {
   transform: translateY(3px);
   box-shadow: 0 2px 0 #b9740a;
 }
 .boton-cuento.secundario {
-  background: linear-gradient(180deg, var(--rosa-juana), var(--rosa-fuerte));
+  background: linear-gradient(180deg, var(--rosa-juana, #ff7fb6), #ff4f9c);
   color: #fff;
-  box-shadow: 0 5px 0 #b13670;
+  box-shadow: 0 5px 0 #b13670, 0 10px 24px rgba(255,79,156,0.35);
 }
 
 .titulo-sec {
+  font-family: var(--font-display);
   font-size: 1.8rem; margin: 0 0 8px;
+  color: var(--crema);
 }
 .instruccion {
-  color: var(--crema-suave); margin: 4px 0 20px;
+  color: var(--crema-suave, #ffe9c2);
+  margin: 4px 0 20px;
 }
 
-/* MINI-JUEGO: Respirar como ballena */
+/* MINI-JUEGOS */
+
+/* Respirar (ola) */
 .ola-contenedor {
   position: relative; width: 100%; height: 240px;
-  background: linear-gradient(180deg, transparent 0%, rgba(110, 193, 228, 0.15) 100%);
-  border-radius: var(--radio-medio); overflow: hidden;
-  border: 2px solid rgba(110, 193, 228, 0.4);
+  background: linear-gradient(180deg, transparent 0%, rgba(110,193,228,0.15) 100%);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 2px solid rgba(110,193,228,0.4);
   margin: 20px 0;
 }
 .ola {
   position: absolute; left: 0; right: 0; bottom: 0;
-  height: 30%; background: linear-gradient(180deg, var(--azul-cielo) 0%, #2a7ba8 100%);
+  height: 30%;
+  background: linear-gradient(180deg, var(--sky-d, #2a7ba8) 0%, var(--azul, #6ec1e4) 100%);
   border-radius: 50% 50% 0 0 / 30% 30% 0 0;
   display: flex; align-items: flex-start; justify-content: center; padding-top: 14px;
   font-size: 1.4rem; font-weight: bold; color: #fff;
   text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  font-family: var(--font-display);
   transition: height 4s ease-in-out;
 }
 .ola.subiendo { height: 95%; }
 .ola.bajando  { height: 20%; }
 
 .contador-respiros {
-  font-size: 1.1rem; color: var(--amarillo-estrella);
-  font-weight: bold; margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--amarillo-estrella, #ffd866);
+  font-weight: bold;
+  margin-top: 10px;
 }
 
-/* MINI-JUEGO: Estrellas */
+/* Estrellas */
 .zona-estrellas {
   display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
-  margin: 24px 0; max-width: 400px; margin-left: auto; margin-right: auto;
+  margin: 24px auto;
+  max-width: 400px;
 }
 .estrella-clickable {
-  width: 60px; height: 60px; cursor: pointer;
+  width: 60px; height: 60px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 2.5rem; color: var(--amarillo-estrella);
-  filter: drop-shadow(0 0 8px rgba(255, 216, 102, 0.6));
-  transition: transform 0.2s ease, opacity 0.4s ease;
+  font-size: 2.5rem;
+  color: var(--amarillo-estrella, #ffd866);
+  filter: drop-shadow(0 0 8px rgba(255,216,102,0.6));
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-bouncy), opacity 0.4s ease;
 }
-.estrella-clickable:hover { transform: scale(1.15); }
+.estrella-clickable:hover { transform: scale(1.2) rotate(15deg); }
 .estrella-clickable.contada {
   opacity: 0.3; transform: scale(0.85);
   pointer-events: none;
 }
 
-/* MINI-JUEGO: Decir lo que siento */
+/* Decir lo que siento */
 .input-sentimiento {
   display: block; margin: 16px auto;
-  padding: 14px 20px; width: 100%; max-width: 320px;
-  font-family: inherit; font-size: 1.2rem;
+  padding: 14px 20px;
+  width: 100%; max-width: 320px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
   text-align: center;
-  color: var(--amarillo-estrella);
-  background: rgba(14, 19, 54, 0.7);
-  border: 2px solid var(--morado-sopa);
-  border-radius: var(--radio-medio); outline: none;
+  color: var(--amarillo-estrella, #ffd866);
+  background: oklch(28% 0.05 280 / 0.6);
+  border: 2px solid var(--morado-sopa, #c084fc);
+  border-radius: var(--r-md);
+  outline: none;
 }
 .input-sentimiento:focus {
-  border-color: var(--amarillo-estrella);
-  box-shadow: 0 0 16px rgba(255, 216, 102, 0.4);
+  border-color: var(--amarillo-estrella, #ffd866);
+  box-shadow: 0 0 16px rgba(255,216,102,0.4);
 }
 .respuesta-munra {
   margin-top: 18px; padding: 16px 20px;
-  background: rgba(149, 225, 193, 0.15);
-  border-left: 3px solid var(--verde-magia);
-  border-radius: var(--radio-chico);
-  font-size: 1.05rem; color: var(--crema);
+  background: oklch(60% 0.10 160 / 0.15);
+  border-left: 3px solid var(--verde-magia, #95e1c1);
+  border-radius: var(--r-md);
+  font-size: 1.05rem;
+  color: var(--crema);
   font-style: italic;
 }
 
-/* MINI-JUEGO: Mover el fuego / Barra */
+/* Barra de energía */
 .barra-energia-contenedor {
   width: 100%; max-width: 400px; margin: 20px auto;
-  height: 30px; background: rgba(14, 19, 54, 0.7);
-  border-radius: 999px; overflow: hidden;
-  border: 2px solid rgba(255, 244, 220, 0.3);
+  height: 30px;
+  background: oklch(20% 0.05 280 / 0.7);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  border: 2px solid oklch(70% 0.10 280 / 0.4);
 }
 .barra-energia {
   width: 0%; height: 100%;
-  background: linear-gradient(90deg, var(--fuego-1), var(--fuego-2));
+  background: linear-gradient(90deg, #ff7a3d, var(--amarillo-estrella, #ffd866));
   transition: width 0.1s ease;
-  box-shadow: 0 0 16px var(--fuego-1);
+  box-shadow: 0 0 16px rgba(255,122,61,0.6);
 }
 .barra-energia.barra-rosa {
-  background: linear-gradient(90deg, var(--rosa-juana), var(--rosa-fuerte));
-  box-shadow: 0 0 16px var(--rosa-fuerte);
+  background: linear-gradient(90deg, var(--rosa-juana, #ff7fb6), #ff4f9c);
+  box-shadow: 0 0 16px rgba(255,79,156,0.6);
 }
 
-/* MINI-JUEGO: Abrazar */
+/* Abrazar */
 .abrazable {
   cursor: pointer;
-  transition: transform 0.15s ease, filter 0.3s ease;
+  transition: transform 0.15s var(--ease-bouncy), filter 0.3s ease;
   user-select: none;
 }
-.abrazable:active { transform: scale(0.95); filter: brightness(1.15); }
+.abrazable:active { transform: scale(0.92); filter: brightness(1.2); }
 
 /* Diploma */
-.diploma {
-  text-align: center;
-}
+.diploma { text-align: center; }
 .diploma-marco {
   background: linear-gradient(160deg, #fff4dc 0%, #ffe9c2 100%);
   color: #2a1240;
-  padding: 36px 28px; border-radius: var(--radio-grande);
+  padding: 36px 28px;
+  border-radius: var(--r-lg);
   border: 4px double #b9740a;
   margin-bottom: 24px;
-  box-shadow: 0 0 60px rgba(255, 216, 102, 0.5);
+  box-shadow: 0 0 60px rgba(255,216,102,0.5);
 }
 .diploma-emoji {
   font-size: 4rem; margin-bottom: 8px;
-  animation: brincar 1.5s ease-in-out infinite;
-}
-@keyframes brincar {
-  0%,100% { transform: translateY(0) rotate(-3deg); }
-  50%     { transform: translateY(-8px) rotate(3deg); }
+  animation: wiggle 1.5s ease-in-out infinite;
 }
 .diploma-titulo {
+  font-family: var(--font-display);
   font-size: 1.8rem; margin: 0 0 16px;
   color: #2a1240;
 }
-.diploma-titulo .rosa { color: var(--rosa-fuerte); }
+.diploma-titulo .rosa { color: #ff4f9c; }
 .diploma-titulo .brillo { color: #b9740a; text-shadow: none; }
 .diploma-texto {
-  font-size: 1.1rem; margin: 10px 0; color: #2a1240;
+  font-size: 1.1rem; margin: 10px 0;
+  color: #2a1240;
 }
 .diploma-texto .brillo { color: #b9740a; text-shadow: none; }
-.diploma-texto strong { color: var(--rosa-fuerte); }
+.diploma-texto strong { color: #ff4f9c; }
 .diploma-firma {
   margin-top: 24px; font-style: italic; color: #5a3a1a;
 }
@@ -377,32 +384,27 @@ html, body {
 }
 .truco-chip {
   display: inline-block; padding: 6px 14px;
-  background: rgba(255, 79, 156, 0.15);
-  border: 1.5px solid var(--rosa-fuerte);
-  border-radius: 999px; font-size: 0.9rem;
-  color: var(--rosa-fuerte); font-weight: bold;
+  background: rgba(255,79,156,0.15);
+  border: 1.5px solid #ff4f9c;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: #ff4f9c;
+  font-weight: bold;
 }
 
-/* Util */
-.oculto { display: none !important; }
-
-/* ===== ANIMACIONES DE MUNRA (estados de ánimo) ===== */
+/* ===== Animaciones SVG de Munra (estados) ===== */
 .munra-svg { width: 100%; height: 100%; }
-.munra-svg .humo {
-  opacity: 0;
-  animation: subir-humo 2s ease-in-out infinite;
-}
+.munra-svg .humo { opacity: 0; animation: subir-humo 2s ease-in-out infinite; }
 .munra-svg.humeando .humo { opacity: 1; }
-.munra-svg .fuego {
-  opacity: 0; transform-origin: 50% 100%;
-}
+.munra-svg .fuego { opacity: 0; transform-origin: 50% 100%; }
 .munra-svg.furiosa .fuego {
   opacity: 1;
   animation: parpadeo-fuego 0.3s ease-in-out infinite alternate;
 }
 .munra-svg.furiosa .cuerpo { fill: #ff8a8a; }
 .munra-svg.furiosa .mejillas { fill: #ff4040; opacity: 0.8; }
-.munra-svg.calmada .cuerpo { fill: var(--azul-cielo); }
+.munra-svg.calmada .cuerpo { fill: #6ec1e4; }
 .munra-svg.calmada .mejillas { fill: #4a9eb8; opacity: 0.5; }
 .munra-svg.feliz .brillos {
   opacity: 1;
@@ -419,16 +421,17 @@ html, body {
   to   { transform: scaleY(1.15) scaleX(0.9); }
 }
 @keyframes brillar {
-  0%,100% { transform: scale(1); opacity: 0.7; }
-  50%     { transform: scale(1.3); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50%      { transform: scale(1.3); opacity: 1; }
 }
-/* Munra siempre con respiración suave */
 .munra-svg .cuerpo,
 .munra-svg .cabeza {
   transform-origin: 50% 50%;
   animation: respirar-munra 3s ease-in-out infinite;
 }
 @keyframes respirar-munra {
-  0%,100% { transform: scale(1); }
-  50%     { transform: scale(1.03); }
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
 }
+
+.oculto { display: none !important; }
