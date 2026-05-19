@@ -10,7 +10,56 @@
 </head>
 <body class="bg-cozy">
 
-  <main class="hub">
+  <!-- ============================================================
+       PANTALLA DE LOGIN (overlay sobre todo el sitio)
+       Solo Juana o Papá pueden entrar al Mundo Mágico.
+       ============================================================ -->
+  <section id="login-overlay" class="login-overlay">
+    <div class="login-fondo" aria-hidden="true">
+      <img src="personajes/manga-selfie-juana-papa.jpeg" alt=""
+           class="login-bg-img" onerror="this.style.display='none'" />
+    </div>
+
+    <div class="login-content">
+      <div class="login-hero pop-in">
+        <img src="personajes/manga-selfie-juana-papa.jpeg" alt="Juana y Papá"
+             class="login-selfie" onerror="this.style.display='none'" />
+        <h1 class="login-titulo">¿Quién entra al <span class="text-accent">Mundo Mágico</span>?</h1>
+        <p class="login-sub">Escoge tu personaje para empezar la aventura ✨</p>
+      </div>
+
+      <div class="perfiles-grid pop-in">
+        <button class="perfil-card" data-perfil="juana">
+          <div class="perfil-foto perfil-foto-juana"></div>
+          <h2 class="perfil-nombre">JUANA</h2>
+          <span class="perfil-emoji">🎀</span>
+        </button>
+        <button class="perfil-card" data-perfil="papa">
+          <div class="perfil-foto perfil-foto-papa"></div>
+          <h2 class="perfil-nombre">PAPÁ</h2>
+          <span class="perfil-emoji">👨</span>
+        </button>
+      </div>
+
+      <div id="zona-clave" class="zona-clave oculto">
+        <p class="clave-prompt" id="clave-prompt">Escribe tu clave secreta:</p>
+        <input type="password" id="input-clave" class="input-clave-cozy"
+               placeholder="••••••••" autocomplete="off" />
+        <div class="clave-acciones">
+          <button class="btn-bubbly" id="btn-entrar">Entrar 🔓</button>
+          <button class="btn-bubbly btn-sky" id="btn-cambiar">← Otro</button>
+        </div>
+        <p class="clave-error oculto" id="clave-error">
+          ¡Esa no es la clave, mi amor! Inténtalo otra vez 💕
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HUB PRINCIPAL (visible después del login)
+       ============================================================ -->
+  <main class="hub" id="hub-main" style="display:none;">
 
     <header class="hub-header pop-in">
       <img src="personajes/manga-selfie-juana-papa.jpeg" alt="Juana y Papá"
@@ -22,6 +71,7 @@
         </h1>
         <p class="hub-sub-titulo">de Juana <span class="text-accent">y</span> Papá</p>
         <p class="hub-tagline">Una colección de aventuras hechas con amor ✨</p>
+        <p class="hub-saludo" id="hub-saludo"></p>
       </div>
     </header>
 
@@ -31,11 +81,121 @@
       <span>Hecho con 💗 por Papá y Juana</span>
       <span class="hub-separador">·</span>
       <span><strong id="contador-juegos">…</strong> aventuras disponibles</span>
+      <span class="hub-separador">·</span>
+      <button class="link-logout" id="btn-logout">Cerrar sesión</button>
     </footer>
 
   </main>
 
   <script>
+    // ============================================================
+    // SISTEMA DE LOGIN (cubre todo el Mundo Mágico)
+    // ============================================================
+    const CLAVES = {
+      juana: 'TeAmoPapa',
+      papa:  'TeAmoJuanis'
+    };
+    let perfilSeleccionado = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    // ¿Ya hay sesión guardada?
+    function tieneSesion() {
+      return !!localStorage.getItem('mundoMagico_perfil');
+    }
+    function getPerfil() {
+      return localStorage.getItem('mundoMagico_perfil');
+    }
+    function setPerfil(p) {
+      localStorage.setItem('mundoMagico_perfil', p);
+    }
+    function cerrarSesion() {
+      localStorage.removeItem('mundoMagico_perfil');
+      perfilSeleccionado = null;
+      $('login-overlay').style.display = 'flex';
+      $('hub-main').style.display = 'none';
+      $('zona-clave').classList.add('oculto');
+      $('input-clave').value = '';
+      document.querySelectorAll('.perfil-card').forEach(c => c.classList.remove('seleccionado'));
+    }
+
+    function entrarAlMundo(perfil) {
+      setPerfil(perfil);
+      $('login-overlay').style.display = 'none';
+      $('hub-main').style.display = 'block';
+      const saludos = {
+        juana: '¡Hola Juana, mi reina! 💖 ¿Lista para una aventura?',
+        papa:  '¡Hola Papá! 👨 Vamos a jugar con la princesa.'
+      };
+      $('hub-saludo').textContent = saludos[perfil] || '';
+    }
+
+    function elegirPerfil(perfil) {
+      perfilSeleccionado = perfil;
+      $('zona-clave').classList.remove('oculto');
+      const prompts = {
+        juana: '¡Hola Juana! 💖 Escribe tu clave secreta:',
+        papa:  '¡Hola Papá! 👨 Escribe tu clave secreta:'
+      };
+      $('clave-prompt').textContent = prompts[perfil];
+      document.querySelectorAll('.perfil-card').forEach(c => c.classList.remove('seleccionado'));
+      document.querySelector(`[data-perfil="${perfil}"]`).classList.add('seleccionado');
+      const input = $('input-clave');
+      input.value = '';
+      input.classList.remove('incorrecta', 'correcta');
+      $('clave-error').classList.add('oculto');
+      setTimeout(() => input.focus(), 250);
+    }
+
+    function verificarClave() {
+      if (!perfilSeleccionado) return;
+      const clave = $('input-clave').value;
+      const correcta = CLAVES[perfilSeleccionado];
+      const input = $('input-clave');
+      const error = $('clave-error');
+
+      if (clave === correcta) {
+        input.classList.remove('incorrecta');
+        input.classList.add('correcta');
+        error.classList.add('oculto');
+        setTimeout(() => entrarAlMundo(perfilSeleccionado), 500);
+      } else {
+        input.classList.remove('correcta');
+        input.classList.add('incorrecta');
+        error.classList.remove('oculto');
+        setTimeout(() => input.classList.remove('incorrecta'), 500);
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function cambiarPerfil() {
+      perfilSeleccionado = null;
+      $('zona-clave').classList.add('oculto');
+      $('input-clave').value = '';
+      $('clave-error').classList.add('oculto');
+      document.querySelectorAll('.perfil-card').forEach(c => c.classList.remove('seleccionado'));
+    }
+
+    // ----- Listeners de login -----
+    document.querySelectorAll('.perfil-card').forEach(card => {
+      card.addEventListener('click', () => elegirPerfil(card.dataset.perfil));
+    });
+    $('btn-entrar').addEventListener('click', verificarClave);
+    $('btn-cambiar').addEventListener('click', cambiarPerfil);
+    $('input-clave').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); verificarClave(); }
+    });
+    $('btn-logout').addEventListener('click', cerrarSesion);
+
+    // Si ya hay sesión activa, saltar el login
+    if (tieneSesion()) {
+      entrarAlMundo(getPerfil());
+    }
+
+    // ============================================================
+    // CATÁLOGO DE JUEGOS (igual que antes)
+    // ============================================================
     const JUEGOS = [
       {
         id: 'juana-no-quiere-dormir',
@@ -83,9 +243,9 @@
       }
     ];
 
-    const grid = document.getElementById('grid-juegos');
+    const grid = $('grid-juegos');
     const disponibles = JUEGOS.filter(j => j.estado === 'disponible').length;
-    document.getElementById('contador-juegos').textContent = disponibles;
+    $('contador-juegos').textContent = disponibles;
 
     JUEGOS.forEach((j, i) => {
       const esJugable = j.estado === 'disponible' && j.ruta;
